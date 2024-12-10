@@ -1,28 +1,28 @@
 import random
 
 
-def rolling_dice(sides):
-    output_number = random.randint(1, sides)
-    return output_number
+def roll_dice(sides):
+    dice_output = random.randint(1, sides)
+    return dice_output
 
 
 def dice():
     sides = 6
-    roll = True
-    while roll:
-        quit_flag = input("Ready to roll? Enter Q to Quit")
-        if quit_flag.lower() != "q":
-            number_after_rolling = rolling_dice(sides)
+    rolling = True
+    while rolling:
+        quit_rolling = input("Ready to roll? Enter Q to Quit")
+        if quit_rolling.lower() != "q":
+            number_after_rolling = roll_dice(sides)
             print("You have rolled a", number_after_rolling)
         else:
-            roll = False
+            rolling = False
 
 
 dice()
 
 
 # Assignment 2: The below program is to guess the correct number between 1 to 100
-def correct_number(input_number):
+def verify_number(input_number):
     if input_number.isdigit() and 1 <= int(input_number) <= 100:
         return True
     else:
@@ -35,8 +35,8 @@ def guess_the_number():
     guessed_number = input("Guess a number between 1 and 100:")
     number_of_guesses = 0
     while not guessed_correctly:
-        if not correct_number(guessed_number):
-            guessed_number = input("I wont count this one Please enter a number between 1 to 100")
+        if not verify_number(guessed_number):
+            guessed_number = input("I won't count this one Please enter a number between 1 to 100")
             continue
         else:
             number_of_guesses += 1
@@ -69,7 +69,7 @@ def check_Armstrong(input_number):
 
     # Finding Armstrong Number
     number_to_check = input_number
-    for n in range(1, number_to_check + 1):
+    for loop_counter in range(1, number_to_check + 1):
         remainder = number_to_check % 10
         sum_of_digits = sum_of_digits + (remainder ** number_of_digits)
         number_to_check //= 10
