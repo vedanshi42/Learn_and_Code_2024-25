@@ -81,4 +81,4 @@ if __name__ == "__main__":
 
     EmployeeService.terminate_employee(3)
 
-    print(f"Is Employee 4 working? {employees[2].is_working()}")
+    print(f"Is Employee 1 working? {employees[0].is_working()}")
