@@ -9,14 +9,14 @@ class BlogInfoFetcher:
 
     def fetch_info(self):
         url = f"https://{self.blog_name}.tumblr.com/api/read/json"
-        response = self.request_handler.make_request(url, params={'num': 1})
+        response = self.request_handler.make_request(url, params={'num': 1})  # Fetching only a single post at once to get blog info.
         if response:
             data = self.request_handler.parse_response(response.text)
             if data:
                 self.extract_blog_info(data)
 
     def extract_blog_info(self, data):
-        blog_info = data.get('tumblelog', {})
+        blog_info = data.get('tumblelog', {}) # Getting data of tumblelog key as the format of response has all data inside this key e.g. tumblelog: {blog_data}
         self.title = self.get_info_or_default(blog_info, 'title', 'No Title')
         self.name = self.get_info_or_default(blog_info, 'name', 'No Name')
         self.description = self.get_info_or_default(blog_info, 'description', 'No Description')

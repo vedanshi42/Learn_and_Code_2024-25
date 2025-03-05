@@ -11,7 +11,7 @@ class RequestHandler:
         for attempt in range(self.max_retries):
             try:
                 response = requests.get(url, params=params)
-                response.raise_for_status()
+                response.raise_for_status()  # If there are errors in response from website, an exception will be raised with the status code.
                 return response
             except requests.exceptions.HTTPError as e:
                 if response.status_code == 429:
@@ -25,7 +25,7 @@ class RequestHandler:
         return None
 
     def handle_rate_limit(self, response):
-        retry_after = int(response.headers.get("Retry-After", 1))
+        retry_after = int(response.headers.get("Retry-After", 1))  # To retry after a sleep if there are too many requests
         print(f"Rate limit reached. Retrying after {retry_after} seconds...")
         time.sleep(retry_after)
         return None
@@ -41,6 +41,8 @@ class RequestHandler:
             print("Empty response received.")
             return None
         try:
+            # json response looks like var tumblr_api_read = {"tumblelog":{blog_data}}; 
+            # so we are fetching only the part between outer curly braces by using slicing
             json_data = response_text[response_text.find('{'):-2]
             return json.loads(json_data)
         except ValueError as e:

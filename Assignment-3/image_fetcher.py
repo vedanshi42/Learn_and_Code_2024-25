@@ -11,12 +11,12 @@ class ImageFetcher:
         url = self.build_url_for_post(post_number)
         response = self.request_handler.make_request(url, params={'num': 1, 'start': post_number - 1})
         print(f"Fetching post {post_number}")
-        self.handle_post_images(response, post_number)
+        self.fetch_post(response, post_number)
 
     def build_url_for_post(self, post_number):
         return f"https://{self.blog_name}.tumblr.com/api/read/json"
 
-    def handle_post_images(self, response, post_number):
+    def fetch_post(self, response, post_number):
         if response:
             data = self.request_handler.parse_response(response.text)
             if data:
@@ -30,7 +30,7 @@ class ImageFetcher:
         self.extract_and_display_images_from_post(posts[0], post_number)
 
     def extract_and_display_images_from_post(self, post, post_number):
-        if 'photos' not in post:
+        if 'photos' not in post:  # Looking for photos key in post (json format)
             self.no_photos_found(post_number)
             return
         photos = post['photos']
@@ -44,7 +44,7 @@ class ImageFetcher:
             self.no_high_res_images_found(post_number)
 
     def build_image_url(self, photo, resolution='1280'):
-        key = f"photo-url-{resolution}"
+        key = f"photo-url-{resolution}" # Only fetching the highest resolution image i.e. 1280 px
         return photo.get(key)
 
     def no_photos_found(self, post_number):
