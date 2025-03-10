@@ -14,12 +14,13 @@ def main():
     price_of_each_item = int(input('Enter price for one item (number only) '))
 
     order_processor = OrderProcessing()
-    order_processor.process_order(user, ordered_item, count_of_ordered_items, price_of_each_item)
+    total_payment_requested = order_processor.process_order(user, ordered_item, count_of_ordered_items, price_of_each_item)
+
+    payment_method = input('Select a payment method (Credit or Debit Card) ')
+    card_number = input(f"Enter {payment_method} card number ")
 
     payment_processor = PaymentProcessing()
-
-    total_payment_requested = count_of_ordered_items * price_of_each_item
-    payment_processor.handle_payment("Credit", total_payment_requested, username, "1234567812345678")
+    payment_processor.handle_payment(payment_method, total_payment_requested, username, card_number)
 
 
 if __name__ == "__main__":

@@ -17,7 +17,7 @@ class OrderProcessing:
     def calculate_total(self, quantity, price):
         total = quantity * price
         if quantity > 5:
-            total *= 0.85  # 15% discount
+            total *= 0.85  # This is to apply 15% discount (100-15 = 85)
         return total
 
     def add_order(self, item, quantity, total):
