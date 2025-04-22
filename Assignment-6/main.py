@@ -20,7 +20,7 @@ def process_atm_transaction(user_name: str, amount: int):
 
         for attempt in range(3):
             entered = input("Enter ATM PIN: ")
-            if atm_machine.enter_pin(entered):1
+            if atm_machine.enter_pin(entered):
                 atm_machine.check_balance()
                 atm_machine.withdraw_cash(amount)
                 return
