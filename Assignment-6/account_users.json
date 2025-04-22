@@ -1,0 +1,42 @@
+[
+    {
+        "name": "Amit Sharma",
+        "account_number": "100012345678",
+        "balance": 15000,
+        "daily_limit": 5000,
+        "card_number": "987654321001",
+        "pin": "1234"
+    },
+    {
+        "name": "Priya Deshmukh",
+        "account_number": "100023456789",
+        "balance": 22000,
+        "daily_limit": 7000,
+        "card_number": "987654321002",
+        "pin": "2345"
+    },
+    {
+        "name": "Rajesh Kumar",
+        "account_number": "100034567890",
+        "balance": 12000,
+        "daily_limit": 4000,
+        "card_number": "987654321003",
+        "pin": "3456"
+    },
+    {
+        "name": "Neha Reddy",
+        "account_number": "100045678901",
+        "balance": 18000,
+        "daily_limit": 6000,
+        "card_number": "987654321004",
+        "pin": "4567"
+    },
+    {
+        "name": "Suresh Patel",
+        "account_number": "100056789012",
+        "balance": 25000,
+        "daily_limit": 8000,
+        "card_number": "987654321005",
+        "pin": "5678"
+    }
+]
