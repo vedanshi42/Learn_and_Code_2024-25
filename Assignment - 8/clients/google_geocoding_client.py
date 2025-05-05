@@ -7,7 +7,7 @@ class GoogleGeocodingClient(GeocodingClientInterface):
     def __init__(self, api_key: str):
         self.api_key = api_key
 
-    def get_coordinates(self, place_name: str):
+    def get_coordinates_from_place_name(self, place_name: str):
         params = {
             "address": place_name,
             "key": self.api_key

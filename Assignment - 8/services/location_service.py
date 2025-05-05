@@ -9,4 +9,4 @@ class LocationService:
         if not place_name or not place_name.strip():
             raise ValueError("Place name cannot be empty.")
 
-        return self.geocoding_client.get_coordinates(place_name.strip())
+        return self.geocoding_client.get_coordinates_from_place_name(place_name.strip())
