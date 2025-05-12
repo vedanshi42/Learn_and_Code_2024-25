@@ -8,12 +8,13 @@ class GoogleGeocodingClient(GeocodingClientInterface):
         self.api_key = api_key
 
     def get_coordinates_from_place_name(self, place_name: str):
-        params = {
-            "address": place_name,
-            "key": self.api_key
-        }
 
         try:
+            params = {
+                "address": place_name,
+                "key": self.api_key
+            }
+
             response = requests.get(f"https://geocode.maps.co/search?q={params['address']}&api_key={params['key']}")
             response.raise_for_status()
         except requests.RequestException as e:

@@ -4,7 +4,8 @@ from app.location_app import LocationApp
 
 
 if __name__ == "__main__":
-    api_key = "68143920d1bc7751750433gslb68b02"  # Only a sample API Key
+
+    api_key = input('Enter user specific API key').strip()
 
     geocoding_client = GoogleGeocodingClient(api_key)
     location_service = LocationService(geocoding_client)
