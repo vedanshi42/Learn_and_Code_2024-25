@@ -1,28 +1,5 @@
 import unittest
-from main import DivisorCounter, DivisorPairMatcher
-
-
-class TestDivisorCounter(unittest.TestCase):
-
-    def test_divisors_of_1(self):
-        self.assertEqual(DivisorCounter(1).count(), 1)
-
-    def test_divisors_of_6(self):
-        self.assertEqual(DivisorCounter(6).count(), 4)  # [1, 2, 3, 6]
-
-    def test_divisors_of_prime(self):
-        self.assertEqual(DivisorCounter(13).count(), 2)  # [1, 13]
-
-    def test_divisors_of_perfect_square(self):
-        self.assertEqual(DivisorCounter(16).count(), 5)  # [1, 2, 4, 8, 16]
-
-    def test_zero_input(self):
-        with self.assertRaises(ValueError):
-            DivisorCounter(0)
-
-    def test_negative_input(self):
-        with self.assertRaises(ValueError):
-            DivisorCounter(-10)
+from program_logic.divisor_pair_matcher import DivisorPairMatcher
 
 
 class TestDivisorPairMatcher(unittest.TestCase):
@@ -60,7 +37,3 @@ class TestDivisorPairMatcher(unittest.TestCase):
     def test_zero_input(self):
         with self.assertRaises(ValueError):
             DivisorPairMatcher(0)
-
-
-if __name__ == "__main__":
-    unittest.main()
