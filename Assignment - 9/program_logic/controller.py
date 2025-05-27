@@ -7,7 +7,7 @@ class DivisorController:
         try:
             number_of_test_cases = int(input("Enter the number of test cases: "))
             executor = ProgramLogicExecutor(number_of_test_cases)
-            executor.execute()
+            executor.run_test_cases()
         except ValueError as ve:
             print(f"Invalid input: {ve}")
         except Exception as e:
