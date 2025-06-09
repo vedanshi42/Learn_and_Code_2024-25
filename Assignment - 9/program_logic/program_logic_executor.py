@@ -8,16 +8,16 @@ class ProgramLogicExecutor:
         self.number_of_test_cases = number_of_test_cases
 
     def run_test_cases(self) -> None:
-        for idx in range(1, self.number_of_test_cases + 1):
-            print(f"\nTest Case {idx}:")
+        for test_case_num in range(1, self.number_of_test_cases + 1):
+            print(f"\nTest Case {test_case_num}:")
             try:
                 upper_limit = self.get_upper_limit()
                 result = self.process_test_case(upper_limit)
                 self.display_result(upper_limit, result)
             except ValueError as e:
-                print(f"Error in Test Case {idx}: {e}")
+                print(f"Error in Test Case {test_case_num}: {e}")
             except Exception as e:
-                print(f"Unexpected error in Test Case {idx}: {e}")
+                print(f"Unexpected error in Test Case {test_case_num}: {e}")
 
     def get_upper_limit(self) -> int:
         value = input("Enter the upper limit: ").strip()

@@ -9,9 +9,9 @@ class DivisorPairMatcher:
             raise ValueError("Input must be a positive integer.")
         self.upper_limit = upper_limit
 
-    def find_matching_pairs(self) -> int:
+    def find_matching_pairs(self):
         count = 0
-        for i in range(1, self.upper_limit):
-            if DivisorCounter(i).count() == DivisorCounter(i + 1).count():
+        for current_num in range(1, self.upper_limit):
+            if DivisorCounter(current_num).count() == DivisorCounter(current_num + 1).count():
                 count += 1
         return count
