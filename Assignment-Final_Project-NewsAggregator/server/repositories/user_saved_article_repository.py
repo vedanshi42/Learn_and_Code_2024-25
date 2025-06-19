@@ -1,0 +1,47 @@
+from server.db.db_connection import DBConnection
+
+
+class UserSavedArticleRepository:
+    def save_by_id(self, user_id, article_id):
+        db = DBConnection()
+        cur = db.get_cursor()
+        try:
+            cur.execute("""
+                INSERT INTO user_saved_articles (user_id, title, content, category, source_url, date_published)
+                SELECT %s, title, content, c.name, source_url, date_published
+                FROM articles a
+                JOIN categories c ON a.category_id = c.category_id
+                WHERE a.article_id = %s
+                ON CONFLICT DO NOTHING
+            """, (user_id, article_id))
+            db.commit()
+        finally:
+            cur.close()
+            db.close()
+
+    def delete_by_id(self, user_id, saved_id):
+        db = DBConnection()
+        cur = db.get_cursor()
+        try:
+            cur.execute("""
+                DELETE FROM user_saved_articles
+                WHERE saved_id = %s AND user_id = %s
+            """, (saved_id, user_id))
+            db.commit()
+        finally:
+            cur.close()
+            db.close()
+
+    def get_saved_articles(self, user_id):
+        db = DBConnection()
+        cur = db.get_cursor()
+        try:
+            cur.execute("""
+                SELECT saved_id, title FROM user_saved_articles
+                WHERE user_id = %s
+                ORDER BY saved_at DESC
+            """, (user_id,))
+            return [{'saved_id': row[0], 'title': row[1]} for row in cur.fetchall()]
+        finally:
+            cur.close()
+            db.close()
