@@ -1,6 +1,7 @@
 from datetime import datetime, UTC, timedelta
 from server.repositories.external_api_repository import ExternalAPIRepository
 from server.repositories.category_repository import CategoryRepository
+from server.repositories.article_repository import ArticleRepository
 from server.exceptions.api_exception import ApiException
 from server.services.api_server.news_api_service import NewsAPIService
 from server.services.api_server.the_news_api_service import TheNewsAPIService
@@ -12,6 +13,7 @@ class NewsFetcher:
         self.api_repo = ExternalAPIRepository()
         self.category_repo = CategoryRepository()
         self.categorizer = ArticleCategorizer()
+        self.article_repo = ArticleRepository()
 
         keys = self.api_repo.get_api_keys()
         self.newsapi_service = NewsAPIService("https://newsapi.org", keys.get("NewsAPI"))
@@ -34,7 +36,12 @@ class NewsFetcher:
         print(f"TheNewsAPI Articles Fetched: {len(articles_thenewsapi)}")
 
         combined_articles = articles_newsapi + articles_thenewsapi
-        return self._assign_and_register_categories(combined_articles)
+        categorized_articles = self._assign_and_register_categories(combined_articles)
+
+        self.article_repo.overwrite_articles(categorized_articles)
+        print("Database Refreshed")
+
+        return categorized_articles
 
     def _fetch_from_newsapi(self):
         last_updated = self.api_repo.get_last_accessed("NewsAPI")

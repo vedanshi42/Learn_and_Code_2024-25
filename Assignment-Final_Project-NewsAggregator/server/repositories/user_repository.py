@@ -10,7 +10,7 @@ class UserRepository(IUserRepository):
             cur.execute("SELECT * FROM users WHERE email = %s", (email,))
             user = cur.fetchone()
             cur.close()
-            return user
+            return dict(user)
         finally:
             db.close()
 
@@ -25,10 +25,14 @@ class UserRepository(IUserRepository):
                 """,
                 (username, email, hashed_pw, role)
             )
-            user_role = cur.fetchone()['role']
+
+            cur.execute(
+                """SELECT * FROM users WHERE email = %s""", (email,)
+            )
+            user = cur.fetchone()
             db.commit()
             cur.close()
-            return user_role
+            return dict(user)
         except Exception as e:
             db.rollback()
             raise e

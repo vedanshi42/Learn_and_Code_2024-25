@@ -19,7 +19,7 @@ def home_screen():
             continue
 
         if user:
-            if user == 'admin':
+            if user['role'] == 'admin':
                 AdminUI().menu()
             else:
                 UserUI().menu(user)

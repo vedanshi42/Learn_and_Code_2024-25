@@ -6,7 +6,8 @@ from datetime import datetime
 class NewsAPIService(BaseAPIService):
     def fetch_articles(self, from_date, to_date):
         params = {
-            "q": from_date,
+            "q": "locale=india",
+            "from": from_date,
             "to": to_date,
             "sortBy": "publishedAt",
             "apiKey": self.api_key

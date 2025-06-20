@@ -1,8 +1,9 @@
 from datetime import datetime, UTC
 from server.db.db_connection import DBConnection
+from server.interfaces.i_external_api_repository import IExternalAPIRepository
 
 
-class ExternalAPIRepository:
+class ExternalAPIRepository(IExternalAPIRepository):
     def update_status(self, name: str, status: str):
         db = DBConnection()
         cur = db.get_cursor()
@@ -35,7 +36,7 @@ class ExternalAPIRepository:
 
     def get_all_keys(self):
         cur = DBConnection().get_cursor()
-        cur.execute("SELECT api_name, api_key FROM external_api_servers")
+        cur.execute("SELECT api_name, api_key, last_accessed FROM external_api_servers")
         return cur.fetchall()
 
     def update_api_key(self, api_name, api_key):
@@ -52,5 +53,5 @@ class ExternalAPIRepository:
         cur.execute("""
             SELECT api_name, api_key FROM external_api_servers
         """)
-        
+
         return {row['api_name']: row['api_key'] for row in cur.fetchall()}

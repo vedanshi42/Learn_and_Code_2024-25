@@ -1,12 +1,35 @@
 import requests
 
 
-class APIClient:
-    def __init__(self, base_url):
-        self.base_url = base_url
+class NewsAggregatorClient:
+    BASE_URL = "http://localhost:8000"
 
-    def post(self, endpoint, payload):
+    def fetch_news(self):
         try:
-            return requests.post(f"{self.base_url}{endpoint}", json=payload).json()
-        except requests.exceptions.RequestException:
-            return {"error": "Failed to connect"}
+            response = requests.get(f"{self.BASE_URL}/fetch-news")
+            response.raise_for_status()
+            articles = response.json().get("articles", [])
+            return articles
+        except requests.exceptions.HTTPError as http_err:
+            print(f"HTTP error: {http_err}")
+        except requests.exceptions.ConnectionError:
+            print("Could not connect to the server. Is it running?")
+        except requests.exceptions.Timeout:
+            print("The request timed out.")
+        except Exception as err:
+            print(f"Unexpected error: {err}")
+
+    def display_articles(self, articles):
+        print(f"Total Articles: {len(articles)}\n")
+        for i, a in enumerate(articles[:5], start=1):
+            print(f"{i}. {a['title']} ({a['category']})")
+
+    def run(self):
+        print("Fetching latest news from server...")
+        articles = self.fetch_news()
+        self.display_articles(articles)
+
+
+if __name__ == "__main__":
+    app = NewsAggregatorClient()
+    app.run()

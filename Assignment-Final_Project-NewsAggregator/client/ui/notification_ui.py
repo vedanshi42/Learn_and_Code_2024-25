@@ -1,5 +1,5 @@
-from server.services.notification_configurator import NotificationsConfigurator
-from server.services.notification_viewer import NotificationsViewer
+from server.services.notifications_service.notification_configurator import NotificationsConfigurator
+from server.services.notifications_service.notification_viewer import NotificationsViewer
 
 
 class NotificationUI:
@@ -16,8 +16,8 @@ class NotificationUI:
         print("\n1. Add Category\n2. Add Keyword\n3. Back")
         ch = input("Choose: ")
         if ch == '1':
-            c = input("Enter Category: ")
-            self.config.add_category_for_user(user.email, c)
+            category = input("Enter Category: ")
+            self.config.add_category(category)
         elif ch == '2':
             k = input("Enter Keyword: ")
             self.config.add_keyword_for_user(user.email, k)

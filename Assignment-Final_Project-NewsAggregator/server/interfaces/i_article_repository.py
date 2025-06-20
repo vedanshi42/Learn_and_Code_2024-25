@@ -5,9 +5,9 @@ from typing import List
 
 class IArticleRepository(ABC):
     @abstractmethod
-    def insert_if_new(self, article: Article) -> bool:
+    def insert_if_new(self, article: Article):
         pass
 
     @abstractmethod
-    def overwrite_articles(self, articles: List[Article]) -> int:
+    def overwrite_articles(self, articles: List[Article]):
         pass
