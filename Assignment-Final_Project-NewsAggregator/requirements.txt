@@ -9,6 +9,7 @@ uvicorn                 # FastAPI server runner
 pydantic                # Data validation
 scikit-learn            # Category prediction ML model
 joblib                  # Running code parallely as pipelines
+tabulate                # Get results in tabular format
 
 # Testing
 pytest

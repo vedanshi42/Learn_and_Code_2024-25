@@ -24,13 +24,14 @@ CREATE TABLE IF NOT EXISTS articles (
 );
 
 -- USER SAVED ARTICLES
-CREATE TABLE IF NOT EXISTS user_saved_articles (
-    saved_id SERIAL PRIMARY KEY,
+CREATE TABLE user_saved_articles (
     user_id INTEGER REFERENCES users(user_id),
     article_id INTEGER REFERENCES articles(article_id) ON DELETE CASCADE,
-    saved_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE(user_id, article_id)
-);
+    title TEXT,
+    content TEXT,
+    category TEXT,
+    source_url TEXT,
+    date_published TIMESTAMP );
 
 -- USER KEYWORDS
 CREATE TABLE IF NOT EXISTS keywords (
@@ -64,4 +65,20 @@ CREATE TABLE IF NOT EXISTS external_api_servers (
     api_key TEXT NOT NULL,
     status VARCHAR(10) CHECK (status IN ('Active', 'Inactive')) DEFAULT 'Active',
     last_accessed TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- FEEDBACK TABLE
+CREATE TABLE feedback (
+    feedback_id SERIAL PRIMARY KEY,
+    article_id INTEGER REFERENCES articles(article_id) ON DELETE CASCADE,
+    likes INTEGER DEFAULT 0,
+    dislikes INTEGER DEFAULT 0
+);
+
+-- ARTICLE FEEDBACK
+CREATE TABLE user_article_feedback (
+    user_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
+    article_id INTEGER REFERENCES articles(article_id) ON DELETE CASCADE,
+    feedback_type VARCHAR(10) CHECK (feedback_type IN ('like', 'dislike')),
+    PRIMARY KEY (user_id, article_id)
 );

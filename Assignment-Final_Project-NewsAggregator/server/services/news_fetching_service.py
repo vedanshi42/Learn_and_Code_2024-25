@@ -38,7 +38,9 @@ class NewsFetcher:
         combined_articles = articles_newsapi + articles_thenewsapi
         categorized_articles = self._assign_and_register_categories(combined_articles)
 
-        self.article_repo.overwrite_articles(categorized_articles)
+        for article in categorized_articles:
+            self.article_repo.insert_if_new(article)
+        
         print("Database Refreshed")
 
         return categorized_articles
@@ -46,12 +48,13 @@ class NewsFetcher:
     def _fetch_from_newsapi(self):
         last_updated = self.api_repo.get_last_accessed("NewsAPI")
         current_time = datetime.now(UTC)
-        from_str = (last_updated or current_time - timedelta(hours=3)).strftime('%Y-%m-%d-%H-%M-%S')
+        from_str = (current_time - timedelta(hours=48)).strftime('%Y-%m-%d-%H-%M-%S')  # (last_updated or current_time - timedelta(hours=3)).strftime('%Y-%m-%d-%H-%M-%S')
         to_str = current_time.strftime('%Y-%m-%d-%H-%M-%S')
 
         articles = self.newsapi_service.fetch_articles(
             from_date=from_str, to_date=to_str
         )
+
         self.api_repo.update_status("NewsAPI", "Active")
         return articles
 
@@ -63,3 +66,7 @@ class NewsFetcher:
     def _assign_and_register_categories(self, articles):
         categorized_articles = self.categorizer.categorize_articles(articles)
         return categorized_articles
+
+
+fetcher = NewsFetcher()
+fetcher.fetch_all()
