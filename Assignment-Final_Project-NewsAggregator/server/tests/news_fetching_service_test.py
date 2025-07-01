@@ -92,7 +92,7 @@ class TestNewsFetcher:
                         "title": "N1", "url": "https://news1.com",
                         "publishedAt": "2025-06-01T10:00:00Z"
                     }]
-                   
+
                 })
             elif "thenewsapi" in url:
                 print(f"URL intercepted: {url}")

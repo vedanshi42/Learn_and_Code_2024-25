@@ -1,4 +1,4 @@
-# News Aggregator - Project Documentation
+# News Aggregator - Project Documentation (NewsViews)
 
 ## Overview
 The News Aggregator project is a modular, client-server system that periodically fetches news from external APIs, stores it in a database, and provides personalized notifications to users based on their keyword and category preferences. Users interact via a CLI, while an admin manages the system.
@@ -113,8 +113,10 @@ The News Aggregator project is a modular, client-server system that periodically
 3. Create PostgreSQL DB and run `schema.sql`
 4. Add `.env` with DB and email credentials
 5. Run `seed_admin.py` to insert admin
-6. Start server via `server/app.py`
-7. Start CLI via `client/main.py`
+6. Start server via 'uvicorn server.server:app'
+7. Run 'server\services\train_category_ml_model.py' to ready the ML model.
+8. Start 'server\utils\scheduler.py' to fetch news every 3.5 hours and send notifications to user.
+9. Run `client/main.py` in bash.
 
 ---
 
