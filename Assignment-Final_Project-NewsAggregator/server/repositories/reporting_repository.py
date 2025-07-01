@@ -11,15 +11,9 @@ class ReportingService:
                 VALUES (%s, %s) ON CONFLICT DO NOTHING
             """, (user_id, article_id))
 
-            cur.execute("""
-                SELECT COUNT(*) FROM reported_articles WHERE article_id = %s
-            """, (article_id,))
-            report_count = cur.fetchone()[0]
-
-            if report_count >= 15:
-                cur.execute("DELETE FROM articles WHERE article_id = %s", (article_id,))
-                print("Article deleted by system due to excessive reports.")
             db.commit()
+            return True
+
         finally:
             cur.close()
             db.close()
