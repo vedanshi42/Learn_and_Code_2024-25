@@ -13,7 +13,7 @@ class UserUI:
 
     def menu(self, user):
         while True:
-            print("\n--- User Menu ---")
+            print(f"\nHi {user['username']}, Welcome to NewsViews")
             print("1. View Headlines")
             print("2. My Saved Articles")
             print("3. Search Headlines")
