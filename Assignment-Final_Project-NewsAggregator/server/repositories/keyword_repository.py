@@ -23,13 +23,19 @@ class KeywordRepository:
         db = DBConnection()
         cur = db.get_cursor()
         try:
-            cur.execute("""
-                UPDATE keywords
-                SET is_enabled = NOT is_enabled
-                WHERE user_id = (SELECT user_id FROM users WHERE email = %s)
-                AND keyword = %s
-            """, (email, keyword))
-            db.commit()
+            cur.execute("""SELECT keyword FROM keywords WHERE is_enabled_by_admin IS FALSE""")
+            admin_disabled_keywords = [row['keyword'] for row in cur.fetchall()]
+
+            if keyword in admin_disabled_keywords:
+                raise ValueError('Keyword disabled by admin')
+            else:
+                cur.execute("""
+                    UPDATE keywords
+                    SET is_enabled = NOT is_enabled
+                    WHERE user_id = (SELECT user_id FROM users WHERE email = %s)
+                    AND keyword = %s
+                """, (email, keyword))
+                db.commit()
         finally:
             cur.close()
             db.close()
@@ -53,14 +59,17 @@ class KeywordRepository:
         try:
             cur.execute("""
                 SELECT keyword,
-                    COUNT(CASE WHEN is_enabled THEN 1 END) AS enabled_count,
-                    COUNT(*) AS total_users
+                    (CASE WHEN is_enabled_by_admin IS TRUE THEN 'Enabled'
+                        ELSE 'Disabled'
+                        END) AS status
                 FROM keywords
-                WHERE is_enabled_by_admin IS TRUE
-                GROUP BY keyword
+
                 ORDER BY keyword
             """)
-            return [{"keyword": row["keyword"], "enabled": row["enabled_count"], "total_users": row["total_users"]} for row in cur.fetchall()]
+            return [{
+                "keyword": row["keyword"],
+                "status": row['status']}
+                for row in cur.fetchall()]
         finally:
             cur.close()
             db.close()
@@ -69,7 +78,16 @@ class KeywordRepository:
         db = DBConnection()
         cur = db.get_cursor()
         try:
-            cur.execute("UPDATE keywords SET is_enabled_by_admin = NOT is_enabled_by_admin WHERE keyword = %s", (word,))
+            cur.execute("""UPDATE keywords
+                        SET is_enabled_by_admin = NOT is_enabled_by_admin
+                        WHERE keyword = %s""", (word,))
+            db.commit()
+
+            cur.execute("""
+                UPDATE keywords
+                SET is_enabled = NOT is_enabled
+                WHERE keyword = %s
+            """, (word,))
             db.commit()
         finally:
             cur.close()

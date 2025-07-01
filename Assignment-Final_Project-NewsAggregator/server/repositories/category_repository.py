@@ -2,7 +2,7 @@ from server.db.db_connection import DBConnection
 
 
 class CategoryRepository:
-    def add_category(self, name: str) -> None:
+    def add_category(self, name: str):
         db = DBConnection()
         cur = db.get_cursor()
         try:
@@ -12,7 +12,7 @@ class CategoryRepository:
             cur.close()
             db.close()
 
-    def get_all_categories(self) -> list:
+    def get_all_categories(self):
         db = DBConnection()
         cur = db.get_cursor()
         try:
@@ -28,15 +28,18 @@ class CategoryRepository:
         try:
             cur.execute("""
                 SELECT c.name,
-                    COUNT(CASE WHEN uc.is_enabled THEN 1 END) AS enabled_count,
-                    COUNT(uc.category_id) AS total_users
+                    (CASE WHEN c.is_enabled_by_admin IS TRUE THEN 'Enabled'
+                        ELSE 'Disabled'
+                        END) AS status
                 FROM categories c
                 LEFT JOIN user_categories uc ON uc.category_id = c.category_id
-                WHERE c.is_enabled_by_admin IS TRUE
-                GROUP BY c.name
+
                 ORDER BY c.name
             """)
-            return [{"name": row["name"], "enabled": row["enabled_count"], "total_users": row["total_users"]} for row in cur.fetchall()]
+            return [{
+                "name": row["name"],
+                "status": row["status"]}
+                for row in cur.fetchall()]
         finally:
             cur.close()
             db.close()
@@ -86,13 +89,19 @@ class CategoryRepository:
         db = DBConnection()
         cur = db.get_cursor()
         try:
-            cur.execute("""
-                UPDATE user_categories
-                SET is_enabled = NOT is_enabled
-                WHERE user_id = (SELECT user_id FROM users WHERE email = %s)
-                AND category_id = (SELECT category_id FROM categories WHERE name = %s)
-            """, (email, category))
-            db.commit()
+            cur.execute("""SELECT name FROM categories WHERE is_enabled_by_admin IS FALSE""")
+            admin_disabled_categories = [row['name'] for row in cur.fetchall()]
+
+            if category in admin_disabled_categories:
+                raise ValueError('Category disabled by admin')
+            else:
+                cur.execute("""
+                    UPDATE user_categories
+                    SET is_enabled = NOT is_enabled
+                    WHERE user_id = (SELECT user_id FROM users WHERE email = %s)
+                    AND category_id = (SELECT category_id FROM categories WHERE name = %s)
+                """, (email, category))
+                db.commit()
         finally:
             cur.close()
             db.close()
@@ -121,7 +130,24 @@ class CategoryRepository:
         db = DBConnection()
         cur = db.get_cursor()
         try:
-            cur.execute("UPDATE categories SET is_enabled_by_admin = NOT is_enabled_by_admin WHERE name = %s", (name,))
+            cur.execute("SELECT category_id FROM categories WHERE name = %s", (name,))
+            row = cur.fetchone()
+            if not row:
+                raise ValueError(f"Category '{name}' not found.")
+            category_id = row['category_id']
+
+            cur.execute("""
+                UPDATE categories
+                SET is_enabled_by_admin = NOT is_enabled_by_admin
+                WHERE category_id = %s
+            """, (category_id,))
+
+            cur.execute("""
+                UPDATE user_categories
+                SET is_enabled = NOT is_enabled
+                WHERE category_id = %s
+            """, (category_id,))
+
             db.commit()
         finally:
             cur.close()

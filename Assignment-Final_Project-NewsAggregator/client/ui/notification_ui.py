@@ -50,8 +50,10 @@ class NotificationUI:
                 print("Category added.")
             elif ch.isdigit() and 1 <= int(ch) <= len(categories):
                 selected = categories[int(ch) - 1]
-                self.client.toggle_category(email, selected["name"])
-                print("Category toggled.")
+                if self.client.toggle_category(email, selected["name"]):
+                    print("Category toggled.")
+                else:
+                    print('Cannot enable admin disabled categories')
             else:
                 print("Invalid input.")
 
@@ -74,7 +76,10 @@ class NotificationUI:
                 print("Keyword added.")
             elif ch.isdigit() and 1 <= int(ch) <= len(keywords):
                 selected = keywords[int(ch) - 1]
-                self.client.toggle_keyword(email, selected["keyword"])
-                print("Keyword toggled.")
+
+                if self.client.toggle_keyword(email, selected["keyword"]):
+                    print("Keyword toggled.")
+                else:
+                    print('Cannot enable admin disabled keywords')
             else:
                 print("Invalid input.")

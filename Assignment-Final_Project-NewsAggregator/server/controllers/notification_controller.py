@@ -60,7 +60,7 @@ def toggle_user_category(payload: ToggleCategoryPayload):
         cat_repo.toggle_category(payload.email, payload.category)
         return {"status": f"Category '{payload.category}' toggled"}
     except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.post("/notifications/categories/add")
@@ -86,7 +86,7 @@ def toggle_user_keyword(payload: ToggleKeywordPayload):
         kw_repo.toggle_keyword(payload.email, payload.keyword)
         return {"status": f"Keyword '{payload.keyword}' toggled"}
     except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.post("/notifications/keywords/add")

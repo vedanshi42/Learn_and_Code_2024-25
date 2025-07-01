@@ -17,12 +17,13 @@ class FeedbackService:
                 WHERE user_id = %s AND article_id = %s
             """, (user_id, article_id))
             existing = cur.fetchone()
+            print(existing)
 
             if existing:
-                if existing[0] == action:
+                if existing['feedback_type'] == action:
                     return
                 else:
-                    self._update_feedback_counts(cur, article_id, existing[0], -1)
+                    self._update_feedback_counts(cur, article_id, existing['feedback_type'], -1)
                     self._update_feedback_counts(cur, article_id, action, 1)
                     cur.execute("""
                         UPDATE user_article_feedback

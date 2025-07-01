@@ -60,10 +60,10 @@ class AdminUI:
         categories = self.client.get_all_categories()
         print("\n--- All Categories ---")
         for idx, cat in enumerate(categories, 1):
-            print(f"{idx}. {cat['name']} | Enabled by {cat['enabled']} of {cat['total_users']} users")
+            print(f"{idx}. {cat['name']} | {cat['status']}")
 
         print("B. Back")
-        ch = input("Enter category number to disable or B to go back: ")
+        ch = input("Enter category number to enable/disable or B to go back: ")
         if ch.isdigit() and 1 <= int(ch) <= len(categories):
             name = categories[int(ch) - 1]['name']
             self.client.disable_category(name)
@@ -77,7 +77,7 @@ class AdminUI:
         keywords = self.client.get_all_keywords()
         print("\n--- All Keywords ---")
         for idx, kw in enumerate(keywords, 1):
-            print(f"{idx}. {kw['keyword']} | Enabled by {kw['enabled']} of {kw['total_users']} users")
+            print(f"{idx}. {kw['keyword']} | {kw['status']}")
 
         print("B. Back")
         ch = input("Enter keyword number to disable or B to go back: ")
