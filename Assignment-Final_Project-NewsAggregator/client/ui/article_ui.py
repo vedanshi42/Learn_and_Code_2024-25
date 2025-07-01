@@ -1,43 +1,51 @@
-from server.repositories.search_article_repository import SearchArticleRepository
-from server.repositories.user_saved_article_repository import UserSavedArticleRepository
+from client.services.client_api import ClientAPIService
 from server.repositories.feedback_repository import FeedbackService
-from server.repositories.reporting_repository import ReportingService
 from tabulate import tabulate
 
 
 class ArticleUI:
     def __init__(self):
-        self.search_article_repo = SearchArticleRepository()
-        self.save_repo = UserSavedArticleRepository()
+        self.client = ClientAPIService()
         self.feedback_service = FeedbackService()
-        self.report_service = ReportingService()
 
     def view_headlines(self, user):
         print("\n=== View Headlines ===")
-        print("1. Today's headlines\n2. Filter by date range\n3. Filter by category\n4. Back")
-        ch = input("Choose: ")
+        print("1. No Filter\n2. Filter by Category\n3. Filter by Date")
+        filter_option = input("Choose filter: ")
+        filter_by = None
 
-        if ch == '1':
-            articles_dict = self.search_article_repo.find_today_articles()
-        elif ch == '2':
-            from_date, to_date = input("Enter date range (YYYY-MM-DD to YYYY-MM-DD): ").split(' to ')
-            articles_dict = self.search_article_repo.find_by_date_range(from_date, to_date)
-        elif ch == '3':
-            category = input("Enter category: ")
-            articles_dict = self.search_article_repo.search_by_category(category)
-        else:
+        if filter_option == '2':
+            filter_by = input("Enter Category: ")
+        elif filter_option == '3':
+            filter_by = input("Enter Date (YYYY-MM-DD): ")
+
+        print("1. No Sort\n2. Sort by Likes\n3. Sort by Dislikes\n4. Sort by Date")
+        sort_option = input("Choose sorting: ")
+        sort_by = None
+
+        if sort_option == '2':
+            sort_by = 'likes'
+        elif sort_option == '3':
+            sort_by = 'dislikes'
+        elif sort_option == '4':
+            sort_by = 'date_published'
+
+        articles = self.client.fetch_headlines(filter_by=filter_by, sort_by=sort_by, user_id=user['user_id'])
+
+        if not articles:
+            print("No articles found.")
             return
 
-        # Prepare table data
         table = []
-        for aid, data in articles_dict.items():
-            title, url, date_str = data
-            likes, dislikes = self.feedback_service.get_feedback_counts(aid)
-            table.append([aid, title[:50], url, date_str, likes, dislikes])
+        for a in articles:
+            table.append([
+                a['article_id'], a['title'], a['source_url'],
+                a['date_published'], a['likes'], a['dislikes']
+            ])
 
-        print(tabulate(table, headers=["ID", "Title", "URL", "Date", "Likes", "Dislikes"]))
+        print(tabulate(table, headers=["ID", "Title", "URL", "Date", "Likes", "Dislikes"],
+                       maxcolwidths=[None, 30]))
 
-        # Interaction loop
         while True:
             print("\nOptions:\n1. Save Article\n2. Like\n3. Dislike\n4. Report\n5. Back")
             choice = input("Select an option: ")
@@ -46,20 +54,19 @@ class ArticleUI:
 
             try:
                 aid = int(input("Enter Article ID: "))
-                if aid not in articles_dict:
-                    print("Invalid ID.")
-                    continue
-
                 if choice == '1':
-                    self.save_repo.save_by_id(user['user_id'], aid)
+                    self.client.save_article(user['user_id'], aid)
+                    print(f"Article with {aid} saved to your saved articles.")
                 elif choice == '2':
-                    self.feedback_service.like_article(user['user_id'], aid)
+                    self.client.like_article(user['user_id'], aid)
+                    print(f"Article with {aid} liked.")
                 elif choice == '3':
-                    self.feedback_service.dislike_article(user['user_id'], aid)
+                    self.client.dislike_article(user['user_id'], aid)
+                    print(f"Article with {aid} disliked.")
                 elif choice == '4':
-                    self.report_service.report_article(user['user_id'], aid)
+                    self.client.report_article(user['user_id'], aid)
+                    print(f"Article with {aid} reported.")
                 else:
-                    print("Invalid choice.")
-            except ValueError:
-                print("Please enter a valid numeric ID.")
-
+                    print("Invalid option.")
+            except Exception as e:
+                print(f"Error: {e}")

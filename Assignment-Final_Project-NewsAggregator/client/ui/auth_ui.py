@@ -1,25 +1,27 @@
-from server.services.auth_service import AuthService
+from client.services.client_api import ClientAPIService
 
 
 class AuthUI:
     def __init__(self):
-        self.service = AuthService()
+        self.client = ClientAPIService()
 
     def login(self):
-        email = input("Email: ")
-        pwd = input("Password: ")
-        try:
-            return self.service.login(email, pwd)
-        except Exception as e:
-            print(e)
-            return None
+        user_email = input("Email: ")
+        user_password = input("Password: ")
+        user = self.client.login(user_email, user_password)
+        if user:
+            print("Login successful")
+            return user
+        print("Login failed.")
+        return None
 
     def signup(self):
-        name = input("Name: ")
-        email = input("Email: ")
-        pwd = input("Password: ")
-        try:
-            return self.service.signup(name, email, pwd)
-        except Exception as e:
-            print(e)
-            return None
+        user_name = input("Name: ")
+        user_email = input("Email: ")
+        user_password = input("Password: ")
+        user = self.client.signup(user_name, user_email, user_password)
+        if user:
+            print("Signup successful")
+            return user
+        print("Signup failed.")
+        return None
