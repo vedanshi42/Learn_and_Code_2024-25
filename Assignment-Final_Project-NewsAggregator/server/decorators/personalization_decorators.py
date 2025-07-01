@@ -9,7 +9,7 @@ def personalize_articles(func):
         articles = func(self, *args, **kwargs)
         user_id = kwargs.get("user_id")
 
-        if not user_id or not articles:
+        if not user_id:
             return articles
 
         service = PersonalizationService()
