@@ -53,7 +53,7 @@ class UserRepository(IUserRepository):
         db = DBConnection()
         cur = db.get_cursor()
         try:
-            cur.execute("SELECT * FROM users")
+            cur.execute("SELECT * FROM users WHERE role != 'admin'")
             users = cur.fetchall()
             return users
         except Exception as e:
