@@ -57,7 +57,8 @@ class FeedbackService:
             cur.execute("""
                 SELECT likes, dislikes FROM feedback WHERE article_id = %s
             """, (article_id,))
-            return cur.fetchone() or (0, 0)
+            data = cur.fetchone() or {'likes': 0, 'dislikes': 0}
+            return data['likes'], data['dislikes']
         finally:
             cur.close()
             db.close()

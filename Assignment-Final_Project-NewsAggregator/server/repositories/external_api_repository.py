@@ -32,12 +32,26 @@ class ExternalAPIRepository(IExternalAPIRepository):
     def get_all_statuses(self):
         cur = DBConnection().get_cursor()
         cur.execute("SELECT api_name, status, last_accessed FROM external_api_servers")
-        return cur.fetchall()
+        return [
+            {
+                "api_name": row["api_name"],
+                "status": row["status"],
+                "last_accessed": row["last_accessed"]
+            }
+            for row in cur.fetchall()
+        ]
 
     def get_all_keys(self):
         cur = DBConnection().get_cursor()
         cur.execute("SELECT api_name, api_key, last_accessed FROM external_api_servers")
-        return cur.fetchall()
+        return [
+            {
+                "api_name": row["api_name"],
+                "api_key": row["api_key"],
+                "last_accessed": row["last_accessed"]
+            }
+            for row in cur.fetchall()
+        ]
 
     def update_api_key(self, api_name, api_key):
         cur = DBConnection().get_cursor()
