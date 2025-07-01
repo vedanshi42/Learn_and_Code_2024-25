@@ -5,15 +5,15 @@ from client.ui.admin_ui import AdminUI
 
 def home_screen():
     while True:
-        print("\n=== Welcome to NewsAggregator ===")
+        print("\n=== Welcome to NewsViews ===")
         print("1. Login\n2. Signup\n3. Exit")
-        choice = input("Choose: ")
+        user_choice = input("Choose: ")
         auth = AuthUI()
-        if choice == '1':
+        if user_choice == '1':
             user = auth.login()
-        elif choice == '2':
+        elif user_choice == '2':
             user = auth.signup()
-        elif choice == '3':
+        elif user_choice == '3':
             break
         else:
             continue
@@ -26,4 +26,7 @@ def home_screen():
 
 
 if __name__ == "__main__":
-    home_screen()
+    try:
+        home_screen()
+    except Exception as e:
+        print(f'Error: Failed to login/create the user {e}')
