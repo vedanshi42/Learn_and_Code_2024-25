@@ -31,7 +31,7 @@ class SearchArticleRepository():
         finally:
             cur.close()
             db.close()
-  
+
     def find_today_articles(self):
         db = DBConnection()
         cur = db.get_cursor()
@@ -51,11 +51,11 @@ class SearchArticleRepository():
         cur = db.get_cursor()
         try:
             cur.execute("""
-                SELECT DISTINCT article_id, title, date_published FROM articles
+                SELECT DISTINCT article_id, title, source_url, date_published FROM articles
                 WHERE date_published BETWEEN %s AND %s
                 ORDER BY date_published DESC
             """, (from_date, to_date))
-            return {row['article_id']: [row['title'], row['date_published'].strftime("%Y-%m-%d %H:%M:%S")] for row in cur.fetchall()}
+            return {row['article_id']: [row['title'], row['source_url'], row['date_published'].strftime("%Y-%m-%d %H:%M:%S")] for row in cur.fetchall()}
         finally:
             cur.close()
             db.close()
@@ -66,11 +66,11 @@ class SearchArticleRepository():
         try:
             pattern = f"%{keyword}%"
             cur.execute("""
-                SELECT DISTINCT article_id, title, date_published FROM articles
+                SELECT DISTINCT article_id, title, source_url, date_published FROM articles
                 WHERE title ILIKE %s OR content ILIKE %s
                 ORDER BY date_published DESC
             """, (pattern, pattern))
-            return {row['article_id']: [row['title'], row['date_published'].strftime("%Y-%m-%d %H:%M:%S")] for row in cur.fetchall()}
+            return {row['article_id']: [row['title'], row['source_url'], row['date_published'].strftime("%Y-%m-%d %H:%M:%S")] for row in cur.fetchall()}
         finally:
             cur.close()
             db.close()
@@ -80,13 +80,13 @@ class SearchArticleRepository():
         cur = db.get_cursor()
         try:
             cur.execute("""
-                SELECT DISTINCT article_id, title, date_published FROM articles
+                SELECT DISTINCT article_id, title, source_url, date_published FROM articles
                 WHERE category_id = (
                     SELECT category_id FROM categories WHERE name = %s
                 )
                 ORDER BY date_published DESC
             """, (category,))
-            return {row['article_id']: [row['title'], row['date_published'].strftime("%Y-%m-%d %H:%M:%S")] for row in cur.fetchall()}
+            return {row['article_id']: [row['title'], row['source_url'], row['date_published'].strftime("%Y-%m-%d %H:%M:%S")] for row in cur.fetchall()}
         finally:
             cur.close()
             db.close()
@@ -104,8 +104,3 @@ class SearchArticleRepository():
         finally:
             cur.close()
             db.close()
-
-
-search = SearchArticleRepository()
-articles = search.search_by_keyword('Isarael')
-print(articles)
