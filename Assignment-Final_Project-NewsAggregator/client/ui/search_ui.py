@@ -1,24 +1,25 @@
-from server.repositories.search_article_repository import SearchArticleRepository
+from client.services.client_api import ClientAPIService
 
 
 class SearchArticleUI:
     def __init__(self):
-        self.search_repo = SearchArticleRepository()
+        self.client = ClientAPIService()
 
     def search(self, user):
-        print("1. Search by Keyword\n2. Search by category\n3. Search by date\n4. Back")
+        print("1. Search by Keyword\n2. Search by Category\n3. Search by Date\n4. Back")
         ch = input("Choose: ")
+
         if ch == '1':
-            search_input = input('Enter Keyword: ')
-            articles = self.search_repo.search_by_category(search_input)
+            term = input("Enter keyword: ")
+            articles = self.client.search_articles_by_keyword(term)
         elif ch == '2':
-            search_input = input('Enter Category: ')
-            articles = self.search_repo.search_by_keyword(search_input)
+            term = input("Enter category: ")
+            articles = self.client.search_articles_by_category(term)
         elif ch == '3':
-            search_input = input("Enter date to filter: (YYYY-MM-DD)")
-            articles = self.search_repo.search_by_date(search_input)
+            date = input("Enter date (YYYY-MM-DD): ")
+            articles = self.client.search_articles_by_date(date)
         else:
             return
 
-        for id, content in articles.items():
-            print(f"{id} - {content}")
+        for article_id, article_content in articles.items():
+            print(f"{article_id} - {article_content[0]}, url - {article_content[1]}")
