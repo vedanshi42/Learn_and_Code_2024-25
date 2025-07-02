@@ -39,11 +39,54 @@ class ArticleUI:
         table = []
         for a in articles:
             table.append([
-                a['article_id'], a['title'], a['source_url'],
+                a['article_id'], a['title'], a['category'], a['source_url'],
                 a['date_published'], a['likes'], a['dislikes']
             ])
 
-        print(tabulate(table, headers=["ID", "Title", "URL", "Date", "Likes", "Dislikes"],
+        print(tabulate(table, headers=["ID", "Title", "Category", "URL", "Date", "Likes", "Dislikes"],
+                       maxcolwidths=[None, 30]))
+
+        while True:
+            print("\nOptions:\n1. Save Article\n2. Like\n3. Dislike\n4. Report\n5. Back")
+            choice = input("Select an option: ")
+            if choice == '5':
+                break
+
+            try:
+                aid = int(input("Enter Article ID: "))
+                if choice == '1':
+                    self.client.save_article(user['user_id'], aid)
+                    print(f"Article with {aid} saved to your saved articles.")
+                elif choice == '2':
+                    self.client.like_article(user['user_id'], aid)
+                    print(f"Article with {aid} liked.")
+                elif choice == '3':
+                    self.client.dislike_article(user['user_id'], aid)
+                    print(f"Article with {aid} disliked.")
+                elif choice == '4':
+                    self.client.report_article(user['user_id'], aid)
+                    print(f"Article with {aid} reported.")
+                else:
+                    print("Invalid option.")
+            except Exception as e:
+                print(f"Error: {e}")
+
+    def view_recommended_articles(self, user):
+        print("\n=== Recommended Articles ===")
+        articles = self.client.get_recommended_articles(user['user_id'])
+
+        if not articles:
+            print("No articles found.")
+            return
+
+        table = []
+        for a in articles:
+            table.append([
+                a['article_id'], a['title'], a['category'], a['source_url'],
+                a['date_published'], a['likes'], a['dislikes']
+            ])
+
+        print(tabulate(table, headers=["ID", "Title", "Category", "URL", "Date", "Likes", "Dislikes"],
                        maxcolwidths=[None, 30]))
 
         while True:

@@ -19,6 +19,14 @@ def get_headlines(filter_by: str = None, sort_by: str = None, user_id: int = Non
         raise HTTPException(status_code=500, detail=str(e))
 
 
+@router.get("/recommended")
+def get_recommended_articles(user_id: int):
+    try:
+        return article_service.get_recommended_articles(user_id)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @router.post("/save")
 def save_article(req: ArticleActionRequest):
     article_service.save_article(req.user_id, req.article_id)

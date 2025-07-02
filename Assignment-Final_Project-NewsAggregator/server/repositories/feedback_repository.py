@@ -17,7 +17,6 @@ class FeedbackService:
                 WHERE user_id = %s AND article_id = %s
             """, (user_id, article_id))
             existing = cur.fetchone()
-            print(existing)
 
             if existing:
                 if existing['feedback_type'] == action:

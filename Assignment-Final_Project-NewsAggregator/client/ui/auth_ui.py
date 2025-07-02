@@ -9,10 +9,10 @@ class AuthUI:
         user_email = input("Email: ")
         user_password = input("Password: ")
         user = self.client.login(user_email, user_password)
-        if user:
+        if user and "error" not in user:
             print("Login successful")
             return user
-        print("Login failed.")
+        print(f"Login failed: {user.get('error')}")
         return None
 
     def signup(self):
@@ -20,8 +20,8 @@ class AuthUI:
         user_email = input("Email: ")
         user_password = input("Password: ")
         user = self.client.signup(user_name, user_email, user_password)
-        if user:
+        if user and "error" not in user:
             print("Signup successful")
             return user
-        print("Signup failed.")
+        print(f"Signup failed: {user.get('error')}")
         return None

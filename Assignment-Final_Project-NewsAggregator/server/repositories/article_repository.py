@@ -1,7 +1,7 @@
 from server.db.db_connection import DBConnection
 from server.models.article import Article
 from server.interfaces.i_article_repository import IArticleRepository
-from server.decorators.personalization_decorators import personalize_articles
+from server.services.personalization_service import PersonalizationService
 
 
 class ArticleRepository(IArticleRepository):
@@ -32,10 +32,20 @@ class ArticleRepository(IArticleRepository):
             db.close()
 
     def insert_new_articles(self, articles: list[Article]):
-        for article in articles:
+        clean_articles = self.filter_ascii_articles(articles)
+        for article in clean_articles:
             self.insert_if_new(article)
 
-    @personalize_articles
+    def is_ascii(self, content_string: str):
+        return all(ord(character) < 128 for character in content_string)
+
+    def filter_ascii_articles(self, articles: list[Article]):
+
+        return [
+            article for article in articles
+            if self.is_ascii(article.title) and self.is_ascii(article.content) if article.content
+        ]
+
     def get_filtered_articles(self, filter_by=None, sort_by=None, user_id=None):
         db = DBConnection()
         cur = db.get_cursor()
@@ -43,7 +53,8 @@ class ArticleRepository(IArticleRepository):
             query = """
                 SELECT a.article_id, a.title, a.source_url, a.date_published,
                     COALESCE(f.likes, 0) AS likes,
-                    COALESCE(f.dislikes, 0) AS dislikes
+                    COALESCE(f.dislikes, 0) AS dislikes,
+                    c.name as category
                 FROM articles a
                 LEFT JOIN feedback f ON a.article_id = f.article_id
                 LEFT JOIN categories c ON a.category_id = c.category_id
@@ -77,10 +88,48 @@ class ArticleRepository(IArticleRepository):
                     "date_published": row["date_published"].strftime("%Y-%m-%d %H:%M:%S"),
                     "likes": row["likes"],
                     "dislikes": row["dislikes"],
-                    "category": row.get("category")
+                    "category": row['category']
                 }
                 for row in rows
             ]
+        finally:
+            cur.close()
+            db.close()
+
+    def get_recommended_articles(self, user_id: int):
+        db = DBConnection()
+        cur = db.get_cursor()
+        try:
+            # Step 1: Fetch all articles (you can limit/filter further if needed)
+            cur.execute("""
+                SELECT a.article_id, a.title, a.content, a.source_url, a.date_published,
+                    COALESCE(f.likes, 0) AS likes,
+                    COALESCE(f.dislikes, 0) AS dislikes,
+                    c.name AS category
+                FROM articles a
+                LEFT JOIN feedback f ON a.article_id = f.article_id
+                JOIN categories c ON a.category_id = c.category_id
+                ORDER BY a.date_published DESC
+                LIMIT 100
+            """)
+            articles = [
+                {
+                    "article_id": row["article_id"],
+                    "title": row["title"],
+                    "content": row["content"],
+                    "source_url": row["source_url"],
+                    "date_published": row["date_published"].strftime("%Y-%m-%d %H:%M:%S"),
+                    "likes": row["likes"],
+                    "dislikes": row["dislikes"],
+                    "category": row["category"]
+                }
+                for row in cur.fetchall()
+            ]
+
+            # Step 2: Score and return top articles
+            personalization = PersonalizationService()
+            scored = personalization.score_articles(user_id, articles)
+            return scored[:20]
         finally:
             cur.close()
             db.close()

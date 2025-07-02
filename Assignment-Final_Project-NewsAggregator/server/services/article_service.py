@@ -27,3 +27,6 @@ class ArticleService:
 
     def report_article(self, user_id, article_id):
         self.report_repo.report_article(user_id, article_id)
+
+    def get_recommended_articles(self, user_id):
+        return self.article_repo.get_recommended_articles(user_id)

@@ -15,18 +15,21 @@ class UserUI:
         while True:
             print(f"\nHi {user['username']}, Welcome to NewsViews")
             print("1. View Headlines")
-            print("2. My Saved Articles")
-            print("3. Search Headlines")
-            print("4. Notifications")
-            print("5. Logout")
+            print("2. View Recommended Articles")
+            print("3. My Saved Articles")
+            print("4. Search Headlines")
+            print("5. Notifications")
+            print("6. Logout")
             ch = input("Choose: ")
             if ch == '1':
                 self.article_ui.view_headlines(user)
             elif ch == '2':
-                self.saved_ui.manage(user)
+                self.article_ui.view_recommended_articles(user)
             elif ch == '3':
-                self.search_ui.search(user)
+                self.saved_ui.manage(user)
             elif ch == '4':
-                self.notif_ui.configure(user)
+                self.search_ui.search(user)
             elif ch == '5':
+                self.notif_ui.configure(user)
+            elif ch == '6':
                 break

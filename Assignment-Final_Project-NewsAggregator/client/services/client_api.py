@@ -6,13 +6,13 @@ class ClientAPIService:
 
     def login(self, email, password):
         res = requests.post(f"{self.BASE_URL}/auth/login", json={"email": email, "password": password})
-        return res.json() if res.ok else None
+        return res.json() if res.ok else {"error": res.json().get("detail", "Login failed")}
 
     def signup(self, username, email, password):
         res = requests.post(f"{self.BASE_URL}/auth/signup", json={
             "username": username, "email": email, "password": password
         })
-        return res.json() if res.ok else None
+        return res.json() if res.ok else {"error": res.json().get("detail", "Signup failed")}
 
     # Admin performed actions
     def get_external_statuses(self):
@@ -52,9 +52,13 @@ class ClientAPIService:
             params["filter_by"] = filter_by
         if sort_by:
             params["sort_by"] = sort_by
-        if user_id:
-            params["user_id"] = user_id
+
+        params["user_id"] = user_id
         res = requests.get(f"{self.BASE_URL}/headlines", params=params)
+        return res.json() if res.ok else []
+
+    def get_recommended_articles(self, user_id):
+        res = requests.get(f"{self.BASE_URL}/recommended", params={"user_id": user_id})
         return res.json() if res.ok else []
 
     def save_article(self, user_id, article_id):
