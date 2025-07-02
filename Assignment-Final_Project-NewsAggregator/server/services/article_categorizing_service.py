@@ -8,7 +8,7 @@ class ArticleCategorizer:
         self.predictor = MLCategoryPredictor()
         self.category_repo = CategoryRepository()
 
-    def categorize_articles(self, articles: list[Article]) -> list[Article]:
+    def categorize_articles(self, articles: list[Article]):
         for article in articles:
             article.category = self.predictor.predict(article)
             self.category_repo.add_if_not_exists(article.category)

@@ -18,7 +18,7 @@ class ExternalAPIRepository(IExternalAPIRepository):
             cur.close()
             db.close()
 
-    def get_last_accessed(self, name: str) -> datetime:
+    def get_last_accessed(self, name: str):
         db = DBConnection()
         cur = db.get_cursor()
         try:

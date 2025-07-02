@@ -23,7 +23,7 @@ class NotificationRepository:
             db.close()
 
     @personalize_notifications
-    def get_notifications_for_user(self, email: str) -> list:
+    def get_notifications_for_user(self, email: str):
         db = DBConnection()
         cur = db.get_cursor()
         try:

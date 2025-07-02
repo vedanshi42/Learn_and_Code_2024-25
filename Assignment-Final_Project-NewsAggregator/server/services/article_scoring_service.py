@@ -6,7 +6,7 @@ class ArticleScorer:
         self.disliked_keywords = disliked_keywords
         self.disliked_urls = disliked_urls
 
-    def score(self, article: dict) -> int:
+    def score(self, article: dict):
         score = 0
         title = article['title'].lower()
         content = article['content'].lower() if article['content'] else ""

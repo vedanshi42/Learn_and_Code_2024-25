@@ -5,7 +5,7 @@ from server.services.personalization_service import PersonalizationService
 
 
 class ArticleRepository(IArticleRepository):
-    def insert_if_new(self, article: Article) -> bool:
+    def insert_if_new(self, article: Article):
         db = DBConnection()
         cur = db.get_cursor()
         try:

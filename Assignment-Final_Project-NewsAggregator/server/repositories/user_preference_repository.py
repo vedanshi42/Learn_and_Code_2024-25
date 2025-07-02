@@ -6,7 +6,7 @@ class UserPreferenceRepository(IUserPreferenceRepository):
     def __init__(self):
         self.db = DBConnection()
 
-    def get_liked_categories(self, user_id: int) -> set[str]:
+    def get_liked_categories(self, user_id: int):
         cur = self.db.get_cursor()
         cur.execute("""
             SELECT c.name
@@ -22,7 +22,7 @@ class UserPreferenceRepository(IUserPreferenceRepository):
         cur.close()
         return result
 
-    def get_enabled_keywords(self, user_id: int) -> list[str]:
+    def get_enabled_keywords(self, user_id: int):
         cur = self.db.get_cursor()
         cur.execute("""
             SELECT keyword FROM keywords
@@ -32,7 +32,7 @@ class UserPreferenceRepository(IUserPreferenceRepository):
         cur.close()
         return result
 
-    def get_disliked_keywords_and_urls(self, user_id: int) -> tuple[set[str], list[str]]:
+    def get_disliked_keywords_and_urls(self, user_id: int):
         cur = self.db.get_cursor()
         cur.execute("""
             SELECT LOWER(a.title) AS title, LOWER(COALESCE(a.content, '')) AS content,

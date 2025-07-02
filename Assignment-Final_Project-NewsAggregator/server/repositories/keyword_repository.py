@@ -2,7 +2,7 @@ from server.db.db_connection import DBConnection
 
 
 class KeywordRepository:
-    def add_keyword_for_user(self, email: str, keyword: str) -> None:
+    def add_keyword_for_user(self, email: str, keyword: str):
         db = DBConnection()
         cur = db.get_cursor()
         try:
@@ -40,7 +40,7 @@ class KeywordRepository:
             cur.close()
             db.close()
 
-    def get_keywords_for_user(self, email: str) -> list[dict]:
+    def get_keywords_for_user(self, email: str):
         db = DBConnection()
         cur = db.get_cursor()
         try:

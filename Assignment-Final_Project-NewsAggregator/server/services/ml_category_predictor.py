@@ -11,7 +11,7 @@ class MLCategoryPredictor(ICategoryPredictor):
             raise FileNotFoundError("Trained model not found. Run train_category_model.py first.")
         self.model, self.vectorizer = joblib.load(model_path)
 
-    def predict(self, article: Article) -> str:
+    def predict(self, article: Article):
         combined_text = f"{article.title} {article.content}".lower()
         X = self.vectorizer.transform([combined_text])
         return self.model.predict(X)[0]

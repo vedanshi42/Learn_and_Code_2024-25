@@ -5,7 +5,7 @@ from server.config.settings import EMAIL_HOST, EMAIL_PORT, EMAIL_USER, EMAIL_PAS
 
 
 class EmailService:
-    def send_email(self, to_email: str, subject: str, body: str) -> bool:
+    def send_email(self, to_email: str, subject: str, body: str):
         try:
             msg = MIMEMultipart()
             msg['From'] = EMAIL_USER

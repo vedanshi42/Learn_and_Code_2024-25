@@ -4,5 +4,5 @@ from typing import Dict
 
 class IArticleCategorizer(ABC):
     @abstractmethod
-    def categorize(self, article: Dict) -> str:
+    def categorize(self, article: Dict):
         pass
