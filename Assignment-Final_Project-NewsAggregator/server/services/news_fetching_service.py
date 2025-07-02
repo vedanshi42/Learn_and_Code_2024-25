@@ -38,11 +38,6 @@ class NewsFetcher:
         combined_articles = articles_newsapi + articles_thenewsapi
         categorized_articles = self._assign_and_register_categories(combined_articles)
 
-        for article in categorized_articles:
-            self.article_repo.insert_if_new(article)
-
-        print("Database Refreshed")
-
         return categorized_articles
 
     def _fetch_from_newsapi(self):

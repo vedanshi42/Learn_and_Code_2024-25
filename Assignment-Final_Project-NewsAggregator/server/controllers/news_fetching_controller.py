@@ -13,8 +13,11 @@ def fetch_news():
     try:
         fetcher = NewsFetcher()
         articles = fetcher.fetch_all()
+        print('Updating Database')
 
         ArticleRepository().insert_new_articles(articles)
+        print("Database Refreshed")
+
         NotificationsUpdater().update_notifications_for_all_users()
 
         return JSONResponse(content={"articles": [a.title for a in articles]})

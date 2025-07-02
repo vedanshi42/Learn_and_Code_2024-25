@@ -40,10 +40,10 @@ class ArticleRepository(IArticleRepository):
         return all(ord(character) < 128 for character in content_string)
 
     def filter_ascii_articles(self, articles: list[Article]):
-
         return [
             article for article in articles
-            if self.is_ascii(article.title) and self.is_ascii(article.content) if article.content
+            if article.title and article.content and
+            self.is_ascii(article.title) and self.is_ascii(article.content)
         ]
 
     def get_filtered_articles(self, filter_by=None, sort_by=None, user_id=None):
