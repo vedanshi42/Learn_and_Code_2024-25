@@ -1,4 +1,22 @@
+from contextlib import contextmanager
 from server.db.db_connection import DBConnection
+from server.db.feedback_queries import (
+    SELECT_FEEDBACK_TYPE, UPDATE_USER_FEEDBACK, INSERT_USER_FEEDBACK,
+    SELECT_FEEDBACK_COUNTS
+)
+from server.exceptions.repository_exception import RepositoryException
+from server.config.logging_config import news_agg_logger
+
+
+@contextmanager
+def get_db_cursor():
+    db = DBConnection()
+    cur = db.get_cursor()
+    try:
+        yield cur, db
+    finally:
+        cur.close()
+        db.close()
 
 
 class FeedbackService:
@@ -9,56 +27,49 @@ class FeedbackService:
         self._add_feedback(user_id, article_id, 'dislike')
 
     def _add_feedback(self, user_id, article_id, action):
-        db = DBConnection()
-        cur = db.get_cursor()
         try:
-            cur.execute("""
-                SELECT feedback_type FROM user_article_feedback
-                WHERE user_id = %s AND article_id = %s
-            """, (user_id, article_id))
-            existing = cur.fetchone()
+            with get_db_cursor() as (cur, db):
+                cur.execute(SELECT_FEEDBACK_TYPE, (user_id, article_id))
+                existing = cur.fetchone()
 
-            if existing:
-                if existing['feedback_type'] == action:
-                    return
+                if existing:
+                    if existing['feedback_type'] == action:
+                        return
+                    else:
+                        self._update_feedback_counts(cur, article_id, existing['feedback_type'], -1)
+                        self._update_feedback_counts(cur, article_id, action, 1)
+                        cur.execute(UPDATE_USER_FEEDBACK, (action, user_id, article_id))
                 else:
-                    self._update_feedback_counts(cur, article_id, existing['feedback_type'], -1)
+                    cur.execute(INSERT_USER_FEEDBACK, (user_id, article_id, action))
                     self._update_feedback_counts(cur, article_id, action, 1)
-                    cur.execute("""
-                        UPDATE user_article_feedback
-                        SET feedback_type = %s
-                        WHERE user_id = %s AND article_id = %s
-                    """, (action, user_id, article_id))
-            else:
-                cur.execute("""
-                    INSERT INTO user_article_feedback (user_id, article_id, feedback_type)
-                    VALUES (%s, %s, %s)
-                """, (user_id, article_id, action))
-                self._update_feedback_counts(cur, article_id, action, 1)
 
-            db.commit()
-        finally:
-            cur.close()
-            db.close()
+                db.commit()
+                news_agg_logger(20, f"Feedback submitted by user {user_id}")
+                return True
+
+        except Exception as e:
+            news_agg_logger(40, f"Failed to submit feedback: {e}")
+            raise RepositoryException(f"Failed to add feedback: {e}")
 
     def _update_feedback_counts(self, cur, article_id, action, delta):
         column = "likes" if action == "like" else "dislikes"
-        cur.execute(f"""
+
+        query = f"""
             INSERT INTO feedback (article_id, {column})
             VALUES (%s, %s)
             ON CONFLICT (article_id) DO UPDATE
             SET {column} = feedback.{column} + %s
-        """, (article_id, delta, delta))
+        """
+        cur.execute(query, (article_id, delta, delta))
 
     def get_feedback_counts(self, article_id):
-        db = DBConnection()
-        cur = db.get_cursor()
         try:
-            cur.execute("""
-                SELECT likes, dislikes FROM feedback WHERE article_id = %s
-            """, (article_id,))
-            data = cur.fetchone() or {'likes': 0, 'dislikes': 0}
-            return data['likes'], data['dislikes']
-        finally:
-            cur.close()
-            db.close()
+            with get_db_cursor() as (cur, db):
+                cur.execute(SELECT_FEEDBACK_COUNTS, (article_id,))
+                data = cur.fetchone() or {'likes': 0, 'dislikes': 0}
+
+                news_agg_logger(20, f"Fetched feedback counts for article {article_id}: likes={data['likes']}, dislikes={data['dislikes']}")
+                return data['likes'], data['dislikes']
+        except Exception as e:
+            news_agg_logger(40, f"Failed to get feedback counts for article {article_id}: {e}")
+            raise RepositoryException(f"Failed to get feedback counts: {e}")

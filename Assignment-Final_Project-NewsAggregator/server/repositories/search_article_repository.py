@@ -1,106 +1,118 @@
+from contextlib import contextmanager
 from server.db.db_connection import DBConnection
+from server.db.search_article_queries import (
+    FIND_ARTICLES_BY_CATEGORY_OR_KEYWORD, FIND_TODAY_ARTICLES, FIND_BY_DATE_RANGE,
+    SEARCH_BY_KEYWORD, SEARCH_BY_CATEGORY, SEARCH_BY_DATE
+)
+from server.exceptions.repository_exception import RepositoryException
+from server.config.logging_config import news_agg_logger
 
 
-class SearchArticleRepository():
+@contextmanager
+def get_db_cursor():
+    db = DBConnection()
+    cur = db.get_cursor()
+    try:
+        yield cur, db
+    finally:
+        cur.close()
+        db.close()
+
+
+class SearchArticleRepository:
     def find_articles_by_category_or_keyword(self, category=None, keyword=None):
-        db = DBConnection()
-        cur = db.get_cursor()
         try:
-            query = """
-                SELECT DISTINCT a.article_id, a.title, a.source_url, a.date_published
-                FROM articles a
-                LEFT JOIN categories c ON a.category_id = c.category_id
-                WHERE
-                    c.name LIKE %s OR
-                    (
-                        a.title ILIKE %s OR
-                        a.content ILIKE %s
-                    )
-                ORDER BY a.date_published DESC
-            """
-            category_pattern = ''
-            keyword_pattern = ''
+            with get_db_cursor() as (cur, db):
+                category_pattern = f'%{category}%' if category else ''
+                keyword_pattern = f'%{keyword}%' if keyword else ''
 
-            if category:
-                category_pattern = f'%{category}%'
-            elif keyword:
-                keyword_pattern = f'%{keyword}%'
+                cur.execute(FIND_ARTICLES_BY_CATEGORY_OR_KEYWORD, (category_pattern, keyword_pattern, keyword_pattern))
+                news_agg_logger(20, f"Searched articles by category or keyword: category={category}, keyword={keyword}")
+                return cur.fetchall()
 
-            cur.execute(query, (category_pattern, keyword_pattern, keyword_pattern))
-            return cur.fetchall()
-        finally:
-            cur.close()
-            db.close()
+        except Exception as e:
+            news_agg_logger(40, f"Failed to search articles by category or keyword: {e}")
+            raise RepositoryException(f"Failed to search articles by category or keyword: {e}")
 
     def find_today_articles(self):
-        db = DBConnection()
-        cur = db.get_cursor()
         try:
-            cur.execute("""
-                SELECT DISTINCT article_id, title, source_url, date_published FROM articles
-                WHERE date_published::date = CURRENT_DATE
-                ORDER BY date_published DESC
-            """)
-            return {row['article_id']: [row['title'], row['source_url'], row['date_published'].strftime("%Y-%m-%d %H:%M:%S")] for row in cur.fetchall()}
-        finally:
-            cur.close()
-            db.close()
+            with get_db_cursor() as (cur, db):
+                cur.execute(FIND_TODAY_ARTICLES)
+                news_agg_logger(20, "Fetched today's articles.")
+                return [
+                    {
+                        'article_id': row['article_id'],
+                        'title': row['title'],
+                        'source_url': row['source_url'],
+                        'date_published': row['date_published'].strftime("%Y-%m-%d %H:%M:%S")
+                    }
+                    for row in cur.fetchall()
+                ]
+        except Exception as e:
+            news_agg_logger(40, f"Failed to find today's articles: {e}")
+            raise RepositoryException(f"Failed to find today's articles: {e}")
 
     def find_by_date_range(self, from_date, to_date):
-        db = DBConnection()
-        cur = db.get_cursor()
         try:
-            cur.execute("""
-                SELECT DISTINCT article_id, title, source_url, date_published FROM articles
-                WHERE date_published BETWEEN %s AND %s
-                ORDER BY date_published DESC
-            """, (from_date, to_date))
-            return {row['article_id']: [row['title'], row['source_url'], row['date_published'].strftime("%Y-%m-%d %H:%M:%S")] for row in cur.fetchall()}
-        finally:
-            cur.close()
-            db.close()
+            with get_db_cursor() as (cur, db):
+                cur.execute(FIND_BY_DATE_RANGE, (from_date, to_date))
+                return [
+                    {
+                        'article_id': row['article_id'],
+                        'title': row['title'],
+                        'source_url': row['source_url'],
+                        'date_published': row['date_published'].strftime("%Y-%m-%d %H:%M:%S")
+                    }
+                    for row in cur.fetchall()
+                ]
+        except Exception as e:
+            raise RepositoryException(f"Failed to find articles by date range: {e}")
 
     def search_by_keyword(self, keyword):
-        db = DBConnection()
-        cur = db.get_cursor()
         try:
-            pattern = f"%{keyword}%"
-            cur.execute("""
-                SELECT DISTINCT article_id, title, source_url, date_published FROM articles
-                WHERE title ILIKE %s OR content ILIKE %s
-                ORDER BY date_published DESC
-            """, (pattern, pattern))
-            return {row['article_id']: [row['title'], row['source_url'], row['date_published'].strftime("%Y-%m-%d %H:%M:%S")] for row in cur.fetchall()}
-        finally:
-            cur.close()
-            db.close()
+            with get_db_cursor() as (cur, db):
+                pattern = f"%{keyword}%"
+                cur.execute(SEARCH_BY_KEYWORD, (pattern, pattern))
+                return [
+                    {
+                        'article_id': row['article_id'],
+                        'title': row['title'],
+                        'source_url': row['source_url'],
+                        'date_published': row['date_published'].strftime("%Y-%m-%d %H:%M:%S")
+                    }
+                    for row in cur.fetchall()
+                ]
+        except Exception as e:
+            raise RepositoryException(f"Failed to search articles by keyword: {e}")
 
     def search_by_category(self, category):
-        db = DBConnection()
-        cur = db.get_cursor()
         try:
-            cur.execute("""
-                SELECT DISTINCT article_id, title, source_url, date_published FROM articles
-                WHERE category_id = (
-                    SELECT category_id FROM categories WHERE name = %s
-                )
-                ORDER BY date_published DESC
-            """, (category,))
-            return {row['article_id']: [row['title'], row['source_url'], row['date_published'].strftime("%Y-%m-%d %H:%M:%S")] for row in cur.fetchall()}
-        finally:
-            cur.close()
-            db.close()
+            with get_db_cursor() as (cur, db):
+                cur.execute(SEARCH_BY_CATEGORY, (category,))
+                return [
+                    {
+                        'article_id': row['article_id'],
+                        'title': row['title'],
+                        'source_url': row['source_url'],
+                        'date_published': row['date_published'].strftime("%Y-%m-%d %H:%M:%S")
+                    }
+                    for row in cur.fetchall()
+                ]
+        except Exception as e:
+            raise RepositoryException(f"Failed to search articles by category: {e}")
 
     def search_by_date(self, date):
-        db = DBConnection()
-        cur = db.get_cursor()
         try:
-            cur.execute("""
-                SELECT DISTINCT article_id, title, date_published FROM articles
-                WHERE date_published = %s
-                ORDER BY date_published DESC
-            """, (date,))
-            return {row['article_id']: [row['title'], row['date_published'].strftime("%Y-%m-%d %H:%M:%S")] for row in cur.fetchall()}
-        finally:
-            cur.close()
-            db.close()
+            with get_db_cursor() as (cur, db):
+                cur.execute(SEARCH_BY_DATE, (date,))
+                return [
+                    {
+                        'article_id': row['article_id'],
+                        'title': row['title'],
+                        'source_url': row['source_url'],
+                        'date_published': row['date_published'].strftime("%Y-%m-%d %H:%M:%S")
+                    }
+                    for row in cur.fetchall()
+                ]
+        except Exception as e:
+            raise RepositoryException(f"Failed to search articles by date: {e}")

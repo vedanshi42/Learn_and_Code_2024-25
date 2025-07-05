@@ -1,90 +1,102 @@
+from contextlib import contextmanager
 from server.db.db_connection import DBConnection
-from server.decorators.personalization_decorators import personalize_notifications
+from server.db.notification_queries import (
+    DELETE_USER_NOTIFICATIONS, INSERT_USER_NOTIFICATION, GET_USER,
+    GET_USER_ENABLED_CATEGORIES, GET_USER_ENABLED_KEYWORDS
+)
+from server.exceptions.repository_exception import RepositoryException
+from server.config.logging_config import news_agg_logger
+
+
+@contextmanager
+def get_db_cursor():
+    db = DBConnection()
+    cur = db.get_cursor()
+    try:
+        yield cur, db
+    finally:
+        cur.close()
+        db.close()
 
 
 class NotificationRepository:
     def replace_notifications_for_user(self, user_id: int, articles: list):
-        db = DBConnection()
-        cur = db.get_cursor()
         try:
-            # Clear old notifications
-            cur.execute("DELETE FROM user_notifications WHERE user_id = %s", (user_id,))
+            with get_db_cursor() as (cur, db):
+                cur.execute(DELETE_USER_NOTIFICATIONS, (user_id,))
 
-            # Insert new ones
-            for article in articles:
-                cur.execute(
-                    "INSERT INTO user_notifications (user_id, article_id) VALUES (%s, %s) ON CONFLICT DO NOTHING",
-                    (user_id, article['article_id'])
-                )
+                for article in articles:
+                    cur.execute(INSERT_USER_NOTIFICATION, (user_id, article['article_id']))
 
-            db.commit()
-        finally:
-            cur.close()
-            db.close()
+                db.commit()
+                news_agg_logger(20, f"Notifications replaced for user {user_id}")
+        except Exception as e:
+            news_agg_logger(40, f"Failed to replace notifications: {e}")
+            raise RepositoryException(f"Failed to replace notifications: {e}")
 
-    @personalize_notifications
-    def get_notifications_for_user(self, email: str):
-        db = DBConnection()
-        cur = db.get_cursor()
+    def get_notifications_for_user(self, user_id: str):
         try:
-            # Get user_id
-            cur.execute("SELECT user_id FROM users WHERE email = %s", (email,))
-            user = cur.fetchone()
-            if not user:
-                return []
+            with get_db_cursor() as (cur, db):
+                cur.execute(GET_USER, (user_id,))
+                user = cur.fetchone()
 
-            user_id = user["user_id"]
+                if not user:
+                    news_agg_logger(20, f"No user found with ID {user_id}")
+                    return []
 
-            # Get enabled categories
-            cur.execute("""
-                SELECT category_id FROM user_categories
-                WHERE user_id = %s AND is_enabled = TRUE
-            """, (user_id,))
-            cat_ids = [row["category_id"] for row in cur.fetchall()]
+                cur.execute(GET_USER_ENABLED_CATEGORIES, (user_id,))
+                cat_ids = [row["category_id"] for row in cur.fetchall()]
 
-            # Get enabled keywords
-            cur.execute("""
-                SELECT keyword FROM keywords
-                WHERE user_id = %s AND is_enabled = TRUE
-            """, (user_id,))
-            keywords = [row["keyword"] for row in cur.fetchall()]
+                cur.execute(GET_USER_ENABLED_KEYWORDS, (user_id,))
+                keywords = [row["keyword"] for row in cur.fetchall()]
 
-            # Prepare base query
-            base_query = """
-                SELECT DISTINCT a.article_id, a.title, a.source_url, a.date_published
-                FROM articles a
-                WHERE
-            """
-            query_conditions = []
-            query_params = []
+                query_conditions = []
+                query_params = []
 
-            if cat_ids:
-                query_conditions.append("a.category_id = ANY(%s)")
-                query_params.append(cat_ids)
+                if cat_ids:
+                    query_conditions.append("a.category_id = ANY(%s)")
+                    query_params.append(cat_ids)
 
-            if keywords:
-                keyword_clauses = []
-                for kw in keywords:
-                    keyword_clauses.append("(a.title ILIKE %s OR a.content ILIKE %s)")
-                    query_params.extend([f"%{kw}%", f"%{kw}%"])
-                query_conditions.append(" OR ".join(keyword_clauses))
+                if keywords:
+                    keyword_clauses = []
+                    for kw in keywords:
+                        keyword_clauses.append("(a.title ILIKE %s OR a.content ILIKE %s)")
+                        query_params.extend([f"%{kw}%", f"%{kw}%"])
+                    query_conditions.append(" OR ".join(keyword_clauses))
 
-            # If no filters, return empty (user hasn’t enabled anything)
-            if not query_conditions:
-                return []
+                if not query_conditions:
+                    news_agg_logger(20, f"No notifications found for user {user_id} due to empty conditions")
+                    return []
 
-            full_query = base_query + " OR ".join(query_conditions) + " ORDER BY a.date_published DESC"
-            cur.execute(full_query, query_params)
+                base_query = """SELECT DISTINCT
+                                a.article_id, a.title, a.source_url, a.date_published
+                                FROM articles a WHERE """
+                full_query = base_query + " OR ".join(query_conditions) + " ORDER BY a.date_published DESC"
+                cur.execute(full_query, query_params)
 
-            return [
-                {
-                    "article_id": row["article_id"],
-                    "title": row["title"],
-                    "source_url": row["source_url"],
-                    "date_published": row["date_published"].strftime("%Y-%m-%d %H:%M:%S")
-                }
-                for row in cur.fetchall()
-            ]
-        finally:
-            cur.close()
-            db.close()
+                notifications = [
+                    {
+                        "article_id": row["article_id"],
+                        "title": row["title"],
+                        "source_url": row["source_url"],
+                        "date_published": row["date_published"].strftime("%Y-%m-%d %H:%M:%S")
+                    }
+                    for row in cur.fetchall()
+                ]
+                news_agg_logger(20, f"Notifications retrieved for user {user_id}")
+                return notifications
+        except Exception as e:
+            news_agg_logger(40, f"Failed to get notifications for user: {e}")
+            raise RepositoryException(f"Failed to get notifications for user: {e}")
+
+    def send_notification_to_user(self, user_id: int, article_id: int):
+        try:
+            with get_db_cursor() as (cur, db):
+                cur.execute(INSERT_USER_NOTIFICATION, (user_id, article_id))
+                db.commit()
+
+                news_agg_logger(20, f"Notification sent to user {user_id} for article {article_id}")
+                return True
+        except Exception as e:
+            news_agg_logger(40, f"Failed to send notification: {e}")
+            raise RepositoryException(f"Failed to send notification: {e}")
