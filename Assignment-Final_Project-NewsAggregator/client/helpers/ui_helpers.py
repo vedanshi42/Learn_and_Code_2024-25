@@ -1,5 +1,6 @@
 import msvcrt
 import re
+from datetime import datetime
 
 
 class UIHelpers:
@@ -30,3 +31,10 @@ class UIHelpers:
     @staticmethod
     def is_valid_email(email):
         return re.match(r"^[\w\.-]+@[\w\.-]+\.(com|in|org|net|edu)$", email)
+
+    @staticmethod
+    def validate_date_format(date_str):
+        try:
+            return datetime.strptime(date_str, "%Y-%m-%d").date()
+        except ValueError:
+            raise ValueError(f"Invalid date format: '{date_str}'. Use YYYY-MM-DD.")
