@@ -63,25 +63,26 @@ class ArticleRepository(IArticleRepository):
             self.is_ascii(article.title) and self.is_ascii(article.content)
         ]
 
-    def get_filtered_articles(self, filter_by=None, sort_by=None, user_id=None):
+    def get_filtered_articles(self, filter_by=None, sort_by=None, user_id=None, from_date=None, to_date=None):
         try:
             with get_db_cursor() as (cur, db):
                 query = GET_FILTERED_ARTICLES
+                params = [filter_by, filter_by, f"{filter_by}%", user_id, user_id]
 
+                if from_date and to_date:
+                    query += " AND a.date_published::date BETWEEN %s AND %s"
+                    params.extend([from_date, to_date])
                 if sort_by == 'likes':
                     query += " ORDER BY likes DESC"
                 elif sort_by == 'dislikes':
                     query += " ORDER BY dislikes DESC"
                 elif sort_by == 'date_published':
                     query += " ORDER BY a.date_published DESC"
-
-                cur.execute(query, (filter_by, filter_by, f"{filter_by}%", user_id, user_id))
+                cur.execute(query, tuple(params))
                 rows = cur.fetchall()
-
                 if not rows:
                     news_agg_logger(30, "No articles found for filter.")
                     raise NotFoundException("No articles found.")
-
                 return [
                     {
                         "article_id": row["article_id"],
@@ -94,7 +95,6 @@ class ArticleRepository(IArticleRepository):
                     }
                     for row in rows
                 ]
-
         except NotFoundException:
             raise
         except Exception as e:

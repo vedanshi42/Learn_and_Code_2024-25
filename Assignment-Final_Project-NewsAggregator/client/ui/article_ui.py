@@ -2,6 +2,7 @@ from client.services.article_client import ArticleClient
 from server.repositories.feedback_repository import FeedbackService
 from tabulate import tabulate
 from client.helpers.ui_helpers import UIHelpers
+import textwrap
 
 
 class ArticleUI:
@@ -15,15 +16,21 @@ class ArticleUI:
         sort_by = self._get_sort_option()
 
         articles = self.client.fetch_headlines(filter_by=filter_by, sort_by=sort_by, user_id=user['user_id'])
+        if isinstance(articles, dict) and "error" in articles:
+            print(f"Error: {articles['error']}")
+            return
         self._handle_article_flow(articles, user)
 
     def view_recommended_articles(self, user):
         print("\n=== Recommended Articles ===")
         articles = self.client.get_recommended_articles(user['user_id'])
+        if isinstance(articles, dict) and "error" in articles:
+            print(f"Error: {articles['error']}")
+            return
         self._handle_article_flow(articles, user)
 
     def _get_filter_option(self):
-        print("1. No Filter\n2. Filter by Category\n3. Filter by Date")
+        print("1. No Filter\n2. Filter by Category\n3. Filter by Date\n4. Filter by Date Range")
         option = input("Choose filter: ").strip()
 
         if option == '2':
@@ -37,6 +44,16 @@ class ArticleUI:
                 except ValueError as e:
                     print(f"Invalid date format: {e}")
             return None
+        elif option == '4':
+            from_date = input("Enter From Date (YYYY-MM-DD): ").strip()
+            to_date = input("Enter To Date (YYYY-MM-DD): ").strip()
+            try:
+                from_date = UIHelpers.validate_date_format(from_date)
+                to_date = UIHelpers.validate_date_format(to_date)
+                return {'from_date': from_date, 'to_date': to_date}
+            except ValueError as e:
+                print(f"Invalid date format: {e}")
+                return None
         return None
 
     def _get_sort_option(self):
@@ -52,6 +69,9 @@ class ArticleUI:
         if not articles:
             print("No articles found.")
             return
+        if isinstance(articles, dict) and "error" in articles:
+            print(f"Error: {articles['error']}")
+            return
 
         self._print_articles(articles)
 
@@ -66,15 +86,25 @@ class ArticleUI:
                 print("Invalid option. Please select a valid option.")
 
     def _print_articles(self, articles):
-        table = [[
-            a['article_id'], a['title'], a['category'], a['source_url'],
-            a['date_published'], a['likes'], a['dislikes']
-        ] for a in articles]
+        def wrap(text, width=30):
+            return textwrap.fill(str(text), width=width)
+
+        table = [
+            [
+                a['article_id'],
+                wrap(a['title'], 30),
+                a['category'],
+                wrap(a['source_url'], 30),
+                a['date_published'],
+                a['likes'],
+                a['dislikes']
+            ] for a in articles
+        ]
 
         print(tabulate(
             table,
             headers=["ID", "Title", "Category", "URL", "Date", "Likes", "Dislikes"],
-            maxcolwidths=[None, 30]
+            tablefmt="simple"
         ))
 
     def _handle_user_action(self, choice, user):
@@ -88,17 +118,33 @@ class ArticleUI:
 
         try:
             if choice == '1':
-                self.client.save_article(user_id, aid)
-                print(f"Article {aid} saved.")
+                result = self.client.save_article(user_id, aid)
+                if isinstance(result, dict) and "error" in result:
+                    print(f"Error: {result['error']}")
+                else:
+                    print(f"Article {aid} saved.")
+
             elif choice == '2':
-                self.client.like_article(user_id, aid)
-                print(f"Article {aid} liked.")
+                result = self.client.like_article(user_id, aid)
+                if isinstance(result, dict) and "error" in result:
+                    print(f"Error: {result['error']}")
+                else:
+                    print(f"Article {aid} liked.")
+
             elif choice == '3':
-                self.client.dislike_article(user_id, aid)
-                print(f"Article {aid} disliked.")
+                result = self.client.dislike_article(user_id, aid)
+                if isinstance(result, dict) and "error" in result:
+                    print(f"Error: {result['error']}")
+                else:
+                    print(f"Article {aid} disliked.")
+
             elif choice == '4':
-                self.client.report_article(user_id, aid)
-                print(f"Article {aid} reported.")
+                result = self.client.report_article(user_id, aid)
+                if isinstance(result, dict) and "error" in result:
+                    print(f"Error: {result['error']}")
+                else:
+                    print(f"Article {aid} reported.")
+
             else:
                 print("Invalid option.")
         except Exception as e:
