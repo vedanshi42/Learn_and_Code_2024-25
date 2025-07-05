@@ -11,5 +11,5 @@ class IUserPreferenceRepository(ABC):
         pass
 
     @abstractmethod
-    def get_disliked_keywords_and_urls(self, user_id: int):
+    def get_disliked_keywords(self, user_id: int):
         pass
