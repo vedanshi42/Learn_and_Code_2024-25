@@ -1,11 +1,11 @@
-from client.services.client_api import ClientAPIService
+from client.services.article_client import ArticleClient
 from server.repositories.feedback_repository import FeedbackService
 from tabulate import tabulate
 
 
 class ArticleUI:
     def __init__(self):
-        self.client = ClientAPIService()
+        self.client = ArticleClient()
         self.feedback_service = FeedbackService()
 
     def view_headlines(self, user):
@@ -51,7 +51,10 @@ class ArticleUI:
             choice = input("Select an option: ").strip()
             if choice == '5':
                 break
-            self._handle_user_action(choice, user)
+            elif choice in {'1', '2', '3', '4'}:
+                self._handle_user_action(choice, user)
+            else:
+                print("Invalid option. Please select a valid option.")
 
     def _print_articles(self, articles):
         table = [[

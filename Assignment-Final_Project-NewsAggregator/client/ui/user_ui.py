@@ -33,3 +33,5 @@ class UserUI:
                 self.notif_ui.configure(user)
             elif ch == '6':
                 break
+            else:
+                print("Invalid option. Please select a valid option.")

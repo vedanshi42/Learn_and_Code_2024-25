@@ -1,9 +1,9 @@
-from client.services.client_api import ClientAPIService
+from client.services.saved_article_client import SavedArticleClient
 
 
 class SavedArticleUI:
     def __init__(self):
-        self.client = ClientAPIService()
+        self.client = SavedArticleClient()
 
     def manage(self, user):
         articles = self.client.get_saved_articles(user['user_id'])
