@@ -6,9 +6,10 @@ from server.interfaces.services_interfaces.i_personalization_service_interface i
 
 
 class PersonalizationService(IPersonalizationService):
-    def __init__(self):
-        self.pref_repo = UserPreferenceRepository()
-        self.article_repo = ArticleRepository()
+    def __init__(self, pref_repo=None, article_repo=None, scorer_cls=None):
+        self.pref_repo = pref_repo or UserPreferenceRepository()
+        self.article_repo = article_repo or ArticleRepository()
+        self.scorer_cls = scorer_cls or ArticleScorer
 
     def get_and_score_recommended_articles(self, user_id: int):
         try:
@@ -32,7 +33,7 @@ class PersonalizationService(IPersonalizationService):
             )
             raise Exception(f"Failed to fetch user preferences for scoring: {e}")
 
-        scorer = ArticleScorer(
+        scorer = self.scorer_cls(
             liked_categories,
             liked_keywords,
             disliked_keywords,

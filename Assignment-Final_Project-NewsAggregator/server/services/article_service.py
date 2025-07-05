@@ -8,12 +8,19 @@ from server.interfaces.services_interfaces.i_article_service_interface import IA
 
 
 class ArticleService(IArticleService):
-    def __init__(self):
-        self.article_repo = ArticleRepository()
-        self.search_repo = SearchArticleRepository()
-        self.save_repo = UserSavedArticleRepository()
-        self.feedback_repo = FeedbackService()
-        self.report_repo = ReportingService()
+    def __init__(
+        self,
+        article_repo=None,
+        search_repo=None,
+        save_repo=None,
+        feedback_repo=None,
+        report_repo=None,
+    ):
+        self.article_repo = article_repo or ArticleRepository()
+        self.search_repo = search_repo or SearchArticleRepository()
+        self.save_repo = save_repo or UserSavedArticleRepository()
+        self.feedback_repo = feedback_repo or FeedbackService()
+        self.report_repo = report_repo or ReportingService()
 
     def get_headlines(
         self, filter_by=None, sort_by=None, user_id=None, from_date=None, to_date=None

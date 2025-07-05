@@ -6,9 +6,9 @@ from server.interfaces.services_interfaces.i_auth_service_interface import IAuth
 
 
 class AuthService(IAuthService):
-    def __init__(self):
-        self.user_repo = UserRepository()
-        self.password_service = PasswordService()
+    def __init__(self, user_repo=None, password_service=None):
+        self.user_repo = user_repo or UserRepository()
+        self.password_service = password_service or PasswordService()
 
     def signup(self, username: str, email: str, password: str):
         try:
@@ -24,6 +24,8 @@ class AuthService(IAuthService):
             raise
 
     def login(self, email: str, password: str):
+        if not email or not password:
+            raise ValueError("Email and password must not be empty.")
         try:
             user = self.user_repo.get_user_by_email(email)
             if user and self.password_service.verify_password(
@@ -32,9 +34,6 @@ class AuthService(IAuthService):
                 return user
             else:
                 raise ValueError("Invalid email or password")
-        except RepositoryException as e:
-            news_agg_logger(40, f"Login failed for {email}: {e}")
-            raise
         except Exception as e:
             news_agg_logger(40, f"Login failed for {email}: {e}")
             raise

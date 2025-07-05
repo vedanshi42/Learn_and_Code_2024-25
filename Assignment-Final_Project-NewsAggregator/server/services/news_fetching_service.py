@@ -10,17 +10,25 @@ from server.interfaces.services_interfaces.i_news_fetching_service_interface imp
 
 
 class NewsFetcher(INewsFetchingService):
-    def __init__(self):
-        self.api_repo = ExternalAPIRepository()
-        self.category_repo = CategoryRepository()
-        self.categorizer = ArticleCategorizer()
-        self.article_repo = ArticleRepository()
+    def __init__(
+        self,
+        api_repo=None,
+        category_repo=None,
+        article_repo=None,
+        categorizer=None,
+        newsapi_service=None,
+        thenewsapi_service=None,
+    ):
+        self.api_repo = api_repo or ExternalAPIRepository()
+        self.category_repo = category_repo or CategoryRepository()
+        self.article_repo = article_repo or ArticleRepository()
+        self.categorizer = categorizer or ArticleCategorizer()
 
         keys = self.api_repo.get_api_keys()
-        self.newsapi_service = NewsAPIService(
+        self.newsapi_service = newsapi_service or NewsAPIService(
             "https://newsapi.org", keys.get("NewsAPI")
         )
-        self.thenewsapi_service = TheNewsAPIService(
+        self.thenewsapi_service = thenewsapi_service or TheNewsAPIService(
             "https://api.thenewsapi.com", keys.get("TheNewsAPI")
         )
 
