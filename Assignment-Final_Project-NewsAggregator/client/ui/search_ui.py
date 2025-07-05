@@ -10,18 +10,18 @@ class SearchArticleUI:
             print(
                 "1. Search by Keyword\n2. Search by Category\n3. Search by Date\n4. Back"
             )
-            ch = input("Choose: ")
+            choice = input("Choose: ")
 
-            if ch == "1":
+            if choice == "1":
                 term = input("Enter keyword: ")
                 result = self.client.search_articles(keyword=term)
-            elif ch == "2":
+            elif choice == "2":
                 term = input("Enter category: ")
                 result = self.client.search_articles(category=term)
-            elif ch == "3":
+            elif choice == "3":
                 date = input("Enter date (YYYY-MM-DD): ")
                 result = self.client.search_articles(date=date)
-            elif ch == "4":
+            elif choice == "4":
                 return
             else:
                 print("Invalid option. Please select a valid option.")

@@ -6,12 +6,12 @@ class SavedArticleClient:
 
     def get_saved_articles(self, user_id):
         try:
-            res = requests.get(f"{self.BASE_URL}/users/{user_id}/saved-articles")
+            result = requests.get(f"{self.BASE_URL}/users/{user_id}/saved-articles")
             return (
-                res.json()
-                if res.ok
+                result.json()
+                if result.ok
                 else {
-                    "error": res.json().get("detail", "Failed to fetch saved articles")
+                    "error": result.json().get("detail", "Failed to fetch saved articles")
                 }
             )
         except Exception as e:
@@ -19,14 +19,14 @@ class SavedArticleClient:
 
     def delete_saved_article(self, user_id, article_id):
         try:
-            res = requests.delete(
+            result = requests.delete(
                 f"{self.BASE_URL}/users/{user_id}/saved-articles/{article_id}"
             )
             return (
-                res.json()
-                if res.ok
+                result.json()
+                if result.ok
                 else {
-                    "error": res.json().get("detail", "Failed to delete saved article")
+                    "error": result.json().get("detail", "Failed to delete saved article")
                 }
             )
         except Exception as e:

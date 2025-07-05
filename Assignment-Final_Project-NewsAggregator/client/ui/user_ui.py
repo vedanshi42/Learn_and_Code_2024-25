@@ -20,18 +20,18 @@ class UserUI:
             print("4. Search Headlines")
             print("5. Notifications")
             print("6. Logout")
-            ch = input("Choose: ")
-            if ch == "1":
+            choice = input("Choose: ")
+            if choice == "1":
                 self.article_ui.view_headlines(user)
-            elif ch == "2":
+            elif choice == "2":
                 self.article_ui.view_recommended_articles(user)
-            elif ch == "3":
+            elif choice == "3":
                 self.saved_ui.manage(user)
-            elif ch == "4":
+            elif choice == "4":
                 self.search_ui.search(user)
-            elif ch == "5":
+            elif choice == "5":
                 self.notif_ui.configure(user)
-            elif ch == "6":
+            elif choice == "6":
                 break
             else:
                 print("Invalid option. Please select a valid option.")

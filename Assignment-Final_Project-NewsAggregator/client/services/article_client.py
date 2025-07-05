@@ -20,12 +20,12 @@ class ArticleClient:
                 params["sort_by"] = sort_by
             if user_id is not None:
                 params["user_id"] = user_id
-            res = requests.get(f"{self.BASE_URL}/articles/headlines", params=params)
+            result = requests.get(f"{self.BASE_URL}/articles/headlines", params=params)
             try:
-                data = res.json()
+                data = result.json()
             except Exception:
-                return {"error": f"Server error: {res.text}"}
-            if res.ok:
+                return {"error": f"Server error: {result.text}"}
+            if result.ok:
                 return data
             return {
                 "error": data.get("detail")
@@ -37,14 +37,14 @@ class ArticleClient:
 
     def get_recommended_articles(self, user_id):
         try:
-            res = requests.get(
+            result = requests.get(
                 f"{self.BASE_URL}/articles/recommended", params={"user_id": user_id}
             )
             try:
-                data = res.json()
+                data = result.json()
             except Exception:
-                return {"error": f"Server error: {res.text}"}
-            if res.ok:
+                return {"error": f"Server error: {result.text}"}
+            if result.ok:
                 return data
             return {
                 "error": data.get("detail")
@@ -56,15 +56,15 @@ class ArticleClient:
 
     def save_article(self, user_id, article_id):
         try:
-            res = requests.post(
+            result = requests.post(
                 f"{self.BASE_URL}/users/{user_id}/saved-articles",
                 json={"user_id": user_id, "article_id": article_id},
             )
             try:
-                data = res.json()
+                data = result.json()
             except Exception:
-                return {"error": f"Server error: {res.text}"}
-            if res.ok:
+                return {"error": f"Server error: {result.text}"}
+            if result.ok:
                 return data
             return {
                 "error": data.get("detail")
@@ -76,15 +76,15 @@ class ArticleClient:
 
     def like_article(self, user_id, article_id):
         try:
-            res = requests.post(
+            result = requests.post(
                 f"{self.BASE_URL}/articles/{article_id}/likes",
                 json={"user_id": user_id, "article_id": article_id},
             )
             try:
-                data = res.json()
+                data = result.json()
             except Exception:
-                return {"error": f"Server error: {res.text}"}
-            if res.ok:
+                return {"error": f"Server error: {result.text}"}
+            if result.ok:
                 return data
             return {
                 "error": data.get("detail")
@@ -96,15 +96,15 @@ class ArticleClient:
 
     def dislike_article(self, user_id, article_id):
         try:
-            res = requests.post(
+            result = requests.post(
                 f"{self.BASE_URL}/articles/{article_id}/dislikes",
                 json={"user_id": user_id, "article_id": article_id},
             )
             try:
-                data = res.json()
+                data = result.json()
             except Exception:
-                return {"error": f"Server error: {res.text}"}
-            if res.ok:
+                return {"error": f"Server error: {result.text}"}
+            if result.ok:
                 return data
             return {
                 "error": data.get("detail")
@@ -116,15 +116,15 @@ class ArticleClient:
 
     def report_article(self, user_id, article_id):
         try:
-            res = requests.post(
+            result = requests.post(
                 f"{self.BASE_URL}/articles/{article_id}/reports",
                 json={"user_id": user_id, "article_id": article_id},
             )
             try:
-                data = res.json()
+                data = result.json()
             except Exception:
-                return {"error": f"Server error: {res.text}"}
-            if res.ok:
+                return {"error": f"Server error: {result.text}"}
+            if result.ok:
                 return data
             return {
                 "error": data.get("detail")

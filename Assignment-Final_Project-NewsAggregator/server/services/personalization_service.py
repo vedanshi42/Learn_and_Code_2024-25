@@ -44,7 +44,7 @@ class PersonalizationService(IPersonalizationService):
             article["score"] = scorer.score(article)
 
         return [
-            a
-            for a in sorted(articles, key=lambda x: x["score"], reverse=True)
-            if a["score"] > -3
+            article
+            for article in sorted(articles, key=lambda art: art["score"], reverse=True)
+            if article["score"] > -3
         ]

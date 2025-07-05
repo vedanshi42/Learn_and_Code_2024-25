@@ -13,11 +13,11 @@ class SearchClient:
                 params["keyword"] = keyword
             if date:
                 params["date"] = date
-            res = requests.get(f"{self.BASE_URL}/articles", params=params)
+            result = requests.get(f"{self.BASE_URL}/articles", params=params)
             return (
-                res.json()
-                if res.ok
-                else {"error": res.json().get("detail", "Failed to search articles")}
+                result.json()
+                if result.ok
+                else {"error": result.json().get("detail", "Failed to search articles")}
             )
         except Exception as e:
             return {"error": str(e)}

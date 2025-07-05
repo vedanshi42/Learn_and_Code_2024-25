@@ -27,8 +27,8 @@ class AdminUI:
             print("6. View & Manage All Keywords")
             print("7. View & Delete Reported Articles")
             print("8. Logout")
-            ch = input("Choose: ")
-            action = self.menu_actions.get(ch)
+            choice = input("Choose: ")
+            action = self.menu_actions.get(choice)
             if action:
                 try:
                     action()
@@ -83,16 +83,16 @@ class AdminUI:
             return
         print("\n--- All Categories ---")
 
-        for idx, cat in enumerate(categories, 1):
-            print(f"{idx}. {cat['name']} | {cat['status']}")
+        for category_number, category in enumerate(categories, 1):
+            print(f"{category_number}. {category['name']} | {category['status']}")
         print("B. Back")
 
-        ch = input("Enter category number to enable/disable or B to go back: ")
-        if ch.isdigit() and 1 <= int(ch) <= len(categories):
-            name = categories[int(ch) - 1]["name"]
+        choice = input("Enter category number to enable/disable or B to go back: ")
+        if choice.isdigit() and 1 <= int(choice) <= len(categories):
+            name = categories[int(choice) - 1]["name"]
             result = self.client.disable_category(name)
             self._handle_response(result, f"Category '{name}' disabled.")
-        elif ch.lower() == "b":
+        elif choice.lower() == "b":
             return
         else:
             print("Invalid choice.")
@@ -103,16 +103,17 @@ class AdminUI:
             return
         print("\n--- All Keywords ---")
 
-        for idx, kw in enumerate(keywords, 1):
-            print(f"{idx}. {kw['keyword']} | {kw['status']}")
+        for keyword_number, keyword in enumerate(keywords, 1):
+            print(f"{keyword_number}. {keyword['keyword']} | {keyword['status']}")
         print("B. Back")
 
-        ch = input("Enter keyword number to disable or B to go back: ")
-        if ch.isdigit() and 1 <= int(ch) <= len(keywords):
-            word = keywords[int(ch) - 1]["keyword"]
+        choice = input("Enter keyword number to disable or B to go back: ")
+
+        if choice.isdigit() and 1 <= int(choice) <= len(keywords):
+            word = keywords[int(choice) - 1]["keyword"]
             result = self.client.disable_keyword(word)
             self._handle_response(result, f"Keyword '{word}' disabled.")
-        elif ch.lower() == "b":
+        elif choice.lower() == "b":
             return
         else:
             print("Invalid choice.")
@@ -125,16 +126,16 @@ class AdminUI:
             print("No reported articles found.")
             return
         print("\n--- Reported Articles ---")
-        for idx, a in enumerate(articles, 1):
+        for number, article in enumerate(articles, 1):
             print(
-                f"{idx}. ID: {a['article_id']} | Title: {a['title']} | Reports: {a['report_count']}"
+                f"{number}. ID: {article['article_id']} | Title: {article['title']} | Reports: {article['report_count']}"
             )
         print("B. Back")
-        ch = input(
+        choice = input(
             "Enter number of article to delete if report_count > 5 or B to go back: "
         )
-        if ch.isdigit():
-            index = int(ch) - 1
+        if choice.isdigit():
+            index = int(choice) - 1
             if 0 <= index < len(articles):
                 article = articles[index]
                 if article["report_count"] >= 5:
@@ -146,7 +147,7 @@ class AdminUI:
                     print("Article does not have enough reports to delete.")
             else:
                 print("Invalid selection.")
-        elif ch.lower() == "b":
+        elif choice.lower() == "b":
             return
         else:
             print("Invalid choice.")

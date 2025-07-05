@@ -15,11 +15,11 @@ class NewsAPIService(BaseAPIService):
         data = self.get("/v2/everything", params)
         return [
             Article(
-                title=a["title"],
-                content=a.get("description", ""),
-                source_url=a["url"],
-                date_published=datetime.fromisoformat(a["publishedAt"].replace("Z", "+00:00")),
-                category=a.get("category")
+                title=article["title"],
+                content=article.get("description", ""),
+                source_url=article["url"],
+                date_published=datetime.fromisoformat(article["publishedAt"].replace("Z", "+00:00")),
+                category=article.get("category")
             )
-            for a in data.get("articles", []) if a.get("title") and a.get("url")
+            for article in data.get("articles", []) if article.get("title") and article.get("url")
         ]

@@ -22,6 +22,6 @@ def fetch_news():
 
         NotificationsUpdater().update_notifications_for_all_users()
 
-        return JSONResponse(content={"articles": [a.title for a in articles]})
+        return JSONResponse(content={"articles": [article.title for article in articles]})
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Fetch error: {str(e)}")

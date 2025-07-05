@@ -93,15 +93,15 @@ class ArticleUI:
 
         table = [
             [
-                a["article_id"],
-                wrap(a["title"], 30),
-                a["category"],
-                wrap(a["source_url"], 30),
-                a["date_published"],
-                a["likes"],
-                a["dislikes"],
+                article["article_id"],
+                wrap(article["title"], 30),
+                article["category"],
+                wrap(article["source_url"], 30),
+                article["date_published"],
+                article["likes"],
+                article["dislikes"],
             ]
-            for a in articles
+            for article in articles
         ]
 
         print(
@@ -114,7 +114,7 @@ class ArticleUI:
 
     def _handle_user_action(self, choice, user):
         try:
-            aid = int(input("Enter Article ID: ").strip())
+            article_id = int(input("Enter Article ID: ").strip())
         except ValueError:
             print("Invalid article ID. Must be a number.")
             return
@@ -123,32 +123,32 @@ class ArticleUI:
 
         try:
             if choice == "1":
-                result = self.client.save_article(user_id, aid)
+                result = self.client.save_article(user_id, article_id)
                 if isinstance(result, dict) and "error" in result:
                     print(f"Error: {result['error']}")
                 else:
-                    print(f"Article {aid} saved.")
+                    print(f"Article {article_id} saved.")
 
             elif choice == "2":
-                result = self.client.like_article(user_id, aid)
+                result = self.client.like_article(user_id, article_id)
                 if isinstance(result, dict) and "error" in result:
                     print(f"Error: {result['error']}")
                 else:
-                    print(f"Article {aid} liked.")
+                    print(f"Article {article_id} liked.")
 
             elif choice == "3":
-                result = self.client.dislike_article(user_id, aid)
+                result = self.client.dislike_article(user_id, article_id)
                 if isinstance(result, dict) and "error" in result:
                     print(f"Error: {result['error']}")
                 else:
-                    print(f"Article {aid} disliked.")
+                    print(f"Article {article_id} disliked.")
 
             elif choice == "4":
-                result = self.client.report_article(user_id, aid)
+                result = self.client.report_article(user_id, article_id)
                 if isinstance(result, dict) and "error" in result:
                     print(f"Error: {result['error']}")
                 else:
-                    print(f"Article {aid} reported.")
+                    print(f"Article {article_id} reported.")
 
             else:
                 print("Invalid option.")

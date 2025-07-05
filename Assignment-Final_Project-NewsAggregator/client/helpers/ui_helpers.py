@@ -9,19 +9,19 @@ class UIHelpers:
         print(prompt, end="", flush=True)
         password = ""
         while True:
-            ch = msvcrt.getch()
-            if ch in {b"\r", b"\n"}:
+            choice = msvcrt.getch()
+            if choice in {b"\r", b"\n"}:
                 print("")
                 break
-            elif ch == b"\x08":  # Backspace
+            elif choice == b"\x08":  # Backspace
                 if len(password) > 0:
                     password = password[:-1]
                     print("\b \b", end="", flush=True)
-            elif ch == b"\x03":  # Ctrl+C
+            elif choice == b"\x03":  # Ctrl+C
                 raise KeyboardInterrupt
             else:
                 try:
-                    char = ch.decode("utf-8")
+                    char = choice.decode("utf-8")
                 except Exception:
                     continue
                 password += char
