@@ -332,3 +332,157 @@ maternity,Health
 doctor,Health
 clinic,Health
 syndrome,Health
+malaria,Health
+bacteria,Health
+plasmodium,Health
+vaccination,Health
+logistics,Transportation
+public transport,Transportation
+ride-sharing,Transportation
+transportation network,Transportation
+freight,Transportation
+shipping,Transportation
+vehicle,Transportation
+commute,Transportation
+traffic congestion,Transportation
+transportation policy,Transportation
+athletics,Sports
+championship,Sports
+sportsmanship,Sports
+sports league,Sports
+sports event,Sports
+sports team,Sports
+sports equipment,Sports
+fitness training,Sports
+sports medicine,Sports
+sports analytics,Sports
+streaming service,Entertainment
+film festival,Entertainment
+television show,Entertainment
+celebrity news,Entertainment
+entertainment industry,Entertainment
+box office,Entertainment
+reality show,Entertainment
+award ceremony,Entertainment
+music festival,Entertainment
+podcast,Entertainment
+sustainability,Environment
+conservation,Environment
+renewable energy,Environment
+climate change,Environment
+biodiversity,Environment
+ecosystem,Environment
+environmental policy,Environment
+carbon footprint,Environment
+natural resources,Environment
+waste management,Environment
+public health,Health
+nutrition,Health
+mental illness,Health
+healthcare system,Health
+wellness,Health
+chronic disease,Health
+health insurance,Health
+preventive care,Health
+health policy,Health
+telemedicine,Health
+physics,Science
+chemistry,Science
+environmental science,Science
+genetics,Science
+astronomy,Science
+neuroscience,Science
+scientific method,Science
+research paper,Science
+laboratory,Science
+scientific community,Science
+online learning,Education
+vocational training,Education
+educational technology,Education
+curriculum,Education
+pedagogy,Education
+literacy,Education
+scholarship,Education
+academic performance,Education
+higher education,Education
+distance education,Education
+organized crime,Crime
+cybercrime,Crime
+white-collar crime,Crime
+hate crime,Crime
+domestic violence,Crime
+human trafficking,Crime
+drug trafficking,Crime
+identity theft,Crime
+criminal justice,Crime
+juvenile delinquency,Crime
+national security,Defence
+peacekeeping,Defence
+military strategy,Defence
+defense budget,Defence
+arms control,Defence
+counter-terrorism,Defence
+military intelligence,Defence
+defense contractor,Defence
+strategic alliance,Defence
+military technology,Defence
+global warming,World
+international trade,World
+world health organization,World
+global economy,World
+geopolitical,World
+foreign relations,World
+world peace,World
+humanitarian aid,World
+cultural exchange,World
+international law,World
+political party,Politics
+election campaign,Politics
+public policy,Politics
+political debate,Politics
+voter turnout,Politics
+political reform,Politics
+civil rights,Politics
+international relations,Politics
+political activism,Politics
+grassroots movement,Politics
+inflation rate,Economy
+economic growth,Economy
+fiscal policy,Economy
+monetary policy,Economy
+trade balance,Economy
+consumer price index,Economy
+economic downturn,Economy
+recession risk,Economy
+economic recovery,Economy
+labor market,Economy
+cryptocurrency,Finance
+stock market,Finance
+investment portfolio,Finance
+financial analysis,Finance
+asset management,Finance
+hedge fund,Finance
+capital gains,Finance
+savings account,Finance
+credit score,Finance
+loan,Finance
+venture capital,Business
+entrepreneurship,Business
+merger,Business
+acquisition,Business
+startup ecosystem,Business
+business model,Business
+market research,Business
+business strategy,Business
+supply chain,Business
+e-commerce,Business
+software development,Technology
+artificial neural network,Technology
+data science,Technology
+cybersecurity,Technology
+blockchain,Technology
+virtual reality,Technology
+augmented reality,Technology
+machine vision,Technology
+robotics,Technology
+internet of things,Technology
