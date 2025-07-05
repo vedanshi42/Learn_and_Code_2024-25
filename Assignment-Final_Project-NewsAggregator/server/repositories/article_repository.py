@@ -1,7 +1,7 @@
 from contextlib import contextmanager
 from server.db.db_connection import DBConnection
 from server.models.article import Article
-from server.interfaces.i_article_repository import IArticleRepository
+from server.interfaces.repository_interfaces.i_article_repository import IArticleRepository
 from server.db.article_queries import (
     INSERT_IF_NEW, INSERT_ARTICLE, GET_FILTERED_ARTICLES, GET_RECOMMENDED_ARTICLES,
     CHECK_ADMIN, DELETE_ARTICLE, GET_REPORTED_ARTICLES

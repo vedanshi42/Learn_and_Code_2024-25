@@ -88,15 +88,3 @@ class NotificationRepository:
         except Exception as e:
             news_agg_logger(40, f"Failed to get notifications for user: {e}")
             raise RepositoryException(f"Failed to get notifications for user: {e}")
-
-    def send_notification_to_user(self, user_id: int, article_id: int):
-        try:
-            with get_db_cursor() as (cur, db):
-                cur.execute(INSERT_USER_NOTIFICATION, (user_id, article_id))
-                db.commit()
-
-                news_agg_logger(20, f"Notification sent to user {user_id} for article {article_id}")
-                return True
-        except Exception as e:
-            news_agg_logger(40, f"Failed to send notification: {e}")
-            raise RepositoryException(f"Failed to send notification: {e}")

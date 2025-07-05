@@ -1,8 +1,7 @@
 from contextlib import contextmanager
 from server.db.db_connection import DBConnection
 from server.db.feedback_queries import (
-    SELECT_FEEDBACK_TYPE, UPDATE_USER_FEEDBACK, INSERT_USER_FEEDBACK,
-    SELECT_FEEDBACK_COUNTS
+    SELECT_FEEDBACK_TYPE, UPDATE_USER_FEEDBACK, INSERT_USER_FEEDBACK
 )
 from server.exceptions.repository_exception import RepositoryException
 from server.config.logging_config import news_agg_logger
@@ -61,15 +60,3 @@ class FeedbackService:
             SET {column} = feedback.{column} + %s
         """
         cur.execute(query, (article_id, delta, delta))
-
-    def get_feedback_counts(self, article_id):
-        try:
-            with get_db_cursor() as (cur, db):
-                cur.execute(SELECT_FEEDBACK_COUNTS, (article_id,))
-                data = cur.fetchone() or {'likes': 0, 'dislikes': 0}
-
-                news_agg_logger(20, f"Fetched feedback counts for article {article_id}: likes={data['likes']}, dislikes={data['dislikes']}")
-                return data['likes'], data['dislikes']
-        except Exception as e:
-            news_agg_logger(40, f"Failed to get feedback counts for article {article_id}: {e}")
-            raise RepositoryException(f"Failed to get feedback counts: {e}")

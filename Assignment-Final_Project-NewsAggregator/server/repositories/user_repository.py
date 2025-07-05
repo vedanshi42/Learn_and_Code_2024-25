@@ -4,7 +4,7 @@ from server.db.user_queries import (
     GET_USER_BY_EMAIL, CREATE_USER, GET_USER_BY_EMAIL_AFTER_CREATE,
     EMAIL_EXISTS, GET_ALL_USERS
 )
-from server.interfaces.i_user_repository import IUserRepository
+from server.interfaces.repository_interfaces.i_user_repository import IUserRepository
 from server.exceptions.repository_exception import RepositoryException
 from server.config.logging_config import news_agg_logger
 

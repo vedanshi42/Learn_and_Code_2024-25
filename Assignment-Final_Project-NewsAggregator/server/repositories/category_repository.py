@@ -1,7 +1,7 @@
 from contextlib import contextmanager
 from server.db.db_connection import DBConnection
 from server.db.category_queries import (
-    ADD_CATEGORY, GET_ALL_CATEGORIES, GET_ALL_CATEGORIES_WITH_STATUS, ADD_IF_NOT_EXISTS,
+    ADD_CATEGORY, GET_ALL_CATEGORIES_WITH_STATUS, ADD_IF_NOT_EXISTS,
     GET_CATEGORY_ID, SUBSCRIBE_USER_TO_CATEGORY, GET_ADMIN_DISABLED_CATEGORIES,
     TOGGLE_USER_CATEGORY, GET_CATEGORY_ID_BY_NAME, DISABLE_CATEGORY, DISABLE_USER_CATEGORY,
     GET_USER_CATEGORIES_BY_ID, GET_USER
@@ -31,17 +31,6 @@ class CategoryRepository:
         except Exception as e:
             news_agg_logger(40, f"Failed to add category: {e}")
             raise RepositoryException(f"Failed to add category: {e}")
-
-    def get_all_categories(self):
-        try:
-            with get_db_cursor() as (cur, db):
-                cur.execute(GET_ALL_CATEGORIES)
-                result = [row["name"] for row in cur.fetchall()]
-                news_agg_logger(20, f"Fetched all categories. Count: {len(result)}")
-                return result
-        except Exception as e:
-            news_agg_logger(40, f"Failed to fetch all categories: {e}")
-            raise RepositoryException(f"Failed to fetch all categories: {e}")
 
     def get_all_categories_with_status(self):
         try:

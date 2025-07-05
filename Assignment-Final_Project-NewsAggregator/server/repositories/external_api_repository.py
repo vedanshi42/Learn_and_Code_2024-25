@@ -1,7 +1,7 @@
 from datetime import datetime, UTC
 from contextlib import contextmanager
 from server.db.db_connection import DBConnection
-from server.interfaces.i_external_api_repository import IExternalAPIRepository
+from server.interfaces.repository_interfaces.i_external_api_repository import IExternalAPIRepository
 from server.db.external_api_queries import (
     UPDATE_STATUS, GET_LAST_ACCESSED, GET_ALL_STATUSES, GET_ALL_KEYS, UPDATE_API_KEY, GET_API_KEYS
 )

@@ -3,7 +3,7 @@ from server.db.db_connection import DBConnection
 from server.db.user_preference_queries import (
     GET_LIKED_CATEGORIES, GET_DISLIKED_CATEGORIES, GET_ENABLED_KEYWORDS, GET_LIKED_KEYWORDS, GET_DISLIKED_KEYWORDS, GET_SAVED_ARTICLE_CATEGORIES, GET_SAVED_ARTICLE_KEYWORDS
 )
-from server.interfaces.i_user_preference_repository import IUserPreferenceRepository
+from server.interfaces.repository_interfaces.i_user_preference_repository import IUserPreferenceRepository
 from server.exceptions.repository_exception import RepositoryException
 from server.config.logging_config import news_agg_logger
 

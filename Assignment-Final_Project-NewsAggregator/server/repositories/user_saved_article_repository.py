@@ -25,10 +25,10 @@ class UserSavedArticleRepository:
                 cur.execute(SAVE_BY_ID, (user_id, article_id))
 
                 db.commit()
-                news_agg_logger.info(f"User saved article {article_id} for user {user_id}")
+                news_agg_logger(20, f"User saved article {article_id} for user {user_id}")
                 return True
         except Exception as e:
-            news_agg_logger.error(f"Failed to save article: {e}")
+            news_agg_logger(20, f"Failed to save article: {e}")
             raise RepositoryException(f"Failed to save article: {e}")
 
     def delete_by_id(self, user_id, article_id):
@@ -38,6 +38,7 @@ class UserSavedArticleRepository:
 
                 db.commit()
         except Exception as e:
+            news_agg_logger(40, f"Failed to delete saved article: {e}")
             raise RepositoryException(f"Failed to delete saved article: {e}")
 
     def get_saved_articles(self, user_id):
@@ -57,4 +58,5 @@ class UserSavedArticleRepository:
                     for row in rows
                 ]
         except Exception as e:
+            news_agg_logger(40, f"Failed to get saved articles: {e}")
             raise RepositoryException(f"Failed to get saved articles: {e}")

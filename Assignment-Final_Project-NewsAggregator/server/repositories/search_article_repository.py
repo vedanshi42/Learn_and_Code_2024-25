@@ -1,7 +1,7 @@
 from contextlib import contextmanager
 from server.db.db_connection import DBConnection
 from server.db.search_article_queries import (
-    FIND_ARTICLES_BY_CATEGORY_OR_KEYWORD, FIND_TODAY_ARTICLES, FIND_BY_DATE_RANGE,
+    FIND_ARTICLES_BY_CATEGORY_OR_KEYWORD,
     SEARCH_BY_KEYWORD, SEARCH_BY_CATEGORY, SEARCH_BY_DATE
 )
 from server.exceptions.repository_exception import RepositoryException
@@ -33,40 +33,6 @@ class SearchArticleRepository:
         except Exception as e:
             news_agg_logger(40, f"Failed to search articles by category or keyword: {e}")
             raise RepositoryException(f"Failed to search articles by category or keyword: {e}")
-
-    def find_today_articles(self):
-        try:
-            with get_db_cursor() as (cur, db):
-                cur.execute(FIND_TODAY_ARTICLES)
-                news_agg_logger(20, "Fetched today's articles.")
-                return [
-                    {
-                        'article_id': row['article_id'],
-                        'title': row['title'],
-                        'source_url': row['source_url'],
-                        'date_published': row['date_published'].strftime("%Y-%m-%d %H:%M:%S")
-                    }
-                    for row in cur.fetchall()
-                ]
-        except Exception as e:
-            news_agg_logger(40, f"Failed to find today's articles: {e}")
-            raise RepositoryException(f"Failed to find today's articles: {e}")
-
-    def find_by_date_range(self, from_date, to_date):
-        try:
-            with get_db_cursor() as (cur, db):
-                cur.execute(FIND_BY_DATE_RANGE, (from_date, to_date))
-                return [
-                    {
-                        'article_id': row['article_id'],
-                        'title': row['title'],
-                        'source_url': row['source_url'],
-                        'date_published': row['date_published'].strftime("%Y-%m-%d %H:%M:%S")
-                    }
-                    for row in cur.fetchall()
-                ]
-        except Exception as e:
-            raise RepositoryException(f"Failed to find articles by date range: {e}")
 
     def search_by_keyword(self, keyword):
         try:

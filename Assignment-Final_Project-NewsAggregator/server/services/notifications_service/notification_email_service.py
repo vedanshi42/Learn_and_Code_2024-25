@@ -6,7 +6,7 @@ from server.config.logging_config import news_agg_logger
 
 class NotificationEmailService:
     def __init__(self):
-        self.note_repo = NotificationRepository()
+        self.notifications_repo = NotificationRepository()
         self.user_repo = UserRepository()
         self.emailer = EmailService()
 
@@ -15,7 +15,7 @@ class NotificationEmailService:
             users = self.user_repo.get_all_users()
             for user in users:
                 try:
-                    notifications = self.note_repo.get_notifications_for_user(user['email'])
+                    notifications = self.notifications_repo.get_notifications_for_user(user['user_id'])
                     if not notifications:
                         continue
                     body = f"Hi {user['username']},\n\nHere are your latest article notifications:\n\n"
