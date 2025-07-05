@@ -1,5 +1,5 @@
 from server.models.article import Article
-from server.services.article_categorizing_service import ArticleCategorizer
+from server.utils.categorizer import ArticleCategorizer
 from server.repositories.category_repository import CategoryRepository
 from server.repositories.article_repository import ArticleRepository
 

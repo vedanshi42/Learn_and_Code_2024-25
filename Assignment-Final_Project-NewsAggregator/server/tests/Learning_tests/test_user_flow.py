@@ -1,8 +1,7 @@
 from server.services.auth_service import AuthService
 from server.services.notifications_service.notification_configurator import NotificationsConfigurator
 from server.services.notifications_service.notification_updater import NotificationsUpdater
-from server.services.notifications_service.notification_viewer import NotificationsViewer
-from server.services.article_categorizing_service import ArticleCategorizer
+from server.utils.categorizer import ArticleCategorizer
 from server.services.news_fetching_service import NewsFetcher
 from server.repositories.article_repository import ArticleRepository
 from server.utils.email_utils import EmailService
@@ -48,8 +47,8 @@ class TestEndToEndFlow:
         updater.update_notifications_for_all_users()
 
         # === STEP 7: Read notifications for user ===
-        viewer = NotificationsViewer()
-        notifications = viewer.get_user_notifications(email)
+        updater = NotificationsUpdater()
+        notifications = updater.get_user_notifications(email)
         assert notifications and len(notifications) > 0
 
         # === STEP 8: Email Notification ===

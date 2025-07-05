@@ -14,7 +14,7 @@ class ArticleRecategorizer:
         return psycopg2.connect(
             dbname="news_aggregator_db",
             user="news_agg_user",
-            password="newsagg123",  # 🔁 update this
+            password="newsagg123",
             host="localhost",
             port="5432"
         )
@@ -33,7 +33,7 @@ class ArticleRecategorizer:
                     content=row["content"],
                     source_url=row["source_url"],
                     date_published=row["date_published"],
-                    category="All"  # or dummy value; will be overwritten by ML
+                    category="All"
                 )
                 setattr(article, "article_id", row["article_id"])
                 articles.append(article)
