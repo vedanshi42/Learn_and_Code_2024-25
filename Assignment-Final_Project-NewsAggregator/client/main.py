@@ -16,6 +16,7 @@ def home_screen():
         elif user_choice == '3':
             break
         else:
+            print("Invalid option. Please select a valid option.")
             continue
 
         if user:
@@ -29,4 +30,4 @@ if __name__ == "__main__":
     try:
         home_screen()
     except Exception as e:
-        print(f'Error: Failed to login/create the user {e}')
+        print(f'Error: {e}')
