@@ -35,7 +35,7 @@ SEARCH_BY_CATEGORY = '''
 '''
 
 SEARCH_BY_DATE = '''
-    SELECT DISTINCT article_id, title, date_published FROM articles
-    WHERE date_published = %s
+    SELECT DISTINCT article_id, title, source_url,date_published FROM articles
+    WHERE CAST(date_published AS DATE) = %s
     ORDER BY date_published DESC
 '''

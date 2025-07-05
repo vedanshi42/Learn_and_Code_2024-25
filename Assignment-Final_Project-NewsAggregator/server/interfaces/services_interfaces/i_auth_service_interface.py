@@ -7,9 +7,5 @@ class IAuthService(ABC):
         pass
 
     @abstractmethod
-    def register(self, user_data):
-        pass
-
-    @abstractmethod
-    def logout(self, user_id):
+    def signup(self, username, email, password):
         pass

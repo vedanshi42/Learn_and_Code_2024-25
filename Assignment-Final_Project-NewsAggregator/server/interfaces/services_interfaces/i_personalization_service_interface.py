@@ -3,5 +3,5 @@ from abc import ABC, abstractmethod
 
 class IPersonalizationService(ABC):
     @abstractmethod
-    def get_personalized_feed(self, user_id):
+    def get_and_score_recommended_articles(self, user_id):
         pass

@@ -7,7 +7,11 @@ class IUserPreferenceRepository(ABC):
         pass
 
     @abstractmethod
-    def get_enabled_keywords(self, user_id: int):
+    def get_disliked_categories(self, user_id: int):
+        pass
+
+    @abstractmethod
+    def get_liked_keywords(self, user_id: int):
         pass
 
     @abstractmethod
