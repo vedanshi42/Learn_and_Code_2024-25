@@ -7,7 +7,7 @@ def run_scheduler():
         try:
             print("Triggering news fetch and send notifications...")
             requests.get("http://localhost:8000/fetch-news")  # update articles
-            requests.get("http://localhost:8000/notifications/send")  # send notifications to users
+            requests.post("http://localhost:8000/users/notifications/send")  # send notifications to users
         except Exception as e:
             print(f"Scheduler error: {e}")
 

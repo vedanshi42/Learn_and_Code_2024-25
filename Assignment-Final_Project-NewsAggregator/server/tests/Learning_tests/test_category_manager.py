@@ -2,7 +2,7 @@
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from server.models.article import Article
-from server.services.ml_category_predictor import MLCategoryPredictor
+from server.machine_learning.ml_category_predictor import MLCategoryPredictor
 
 
 class ArticleRecategorizer:
@@ -59,7 +59,7 @@ class ArticleRecategorizer:
 
     def recategorize_all(self):
         articles = self._get_all_articles()
-        print(f"🔍 Found {len(articles)} articles to re-categorize.\n")
+        print(f"Found {len(articles)} articles to re-categorize.\n")
 
         updated = 0
         for article in articles:
@@ -67,10 +67,10 @@ class ArticleRecategorizer:
             self._add_category_if_not_exists(new_category)
             self._update_article_category(article.article_id, new_category)
 
-            print(f"✅ Article ID {article.article_id} → {new_category}")
+            print(f"Article ID {article.article_id} → {new_category}")
             updated += 1
 
-        print(f"\n🎉 Done. {updated} articles updated.")
+        print(f"\nDone. {updated} articles updated.")
 
 
 if __name__ == "__main__":

@@ -1,5 +1,5 @@
 from server.models.article import Article
-from server.services.ml_category_predictor import MLCategoryPredictor
+from server.machine_learning.ml_category_predictor import MLCategoryPredictor
 
 
 class TestMLCategoryPredictor:
