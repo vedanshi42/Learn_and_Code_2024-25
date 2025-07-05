@@ -68,6 +68,62 @@ class TestNotificationsConfigurator(unittest.TestCase):
         result = self.service.get_user_notifications(1)
         self.assertEqual(result, ["notif"])
 
+    @patch(
+        "server.services.notifications_service.notification_configurator.KeywordRepository"
+    )
+    def test_add_keyword_for_user_exception(self, mock_repo):
+        mock_repo.return_value.add_keyword_for_user.side_effect = Exception("DB error")
+        self.service.keyword_repo = mock_repo.return_value
+        with self.assertRaises(Exception):
+            self.service.add_keyword_for_user(1, "kw")
+
+    @patch(
+        "server.services.notifications_service.notification_configurator.CategoryRepository"
+    )
+    def test_add_category_for_user_exception(self, mock_repo):
+        mock_repo.return_value.subscribe_user_to_category.side_effect = Exception(
+            "DB error"
+        )
+        self.service.category_repo = mock_repo.return_value
+        with self.assertRaises(Exception):
+            self.service.add_category_for_user(1, "cat")
+
+    @patch(
+        "server.services.notifications_service.notification_configurator.CategoryRepository"
+    )
+    def test_toggle_category_exception(self, mock_repo):
+        mock_repo.return_value.toggle_category.side_effect = Exception("DB error")
+        self.service.category_repo = mock_repo.return_value
+        with self.assertRaises(Exception):
+            self.service.toggle_category(1, "cat")
+
+    @patch(
+        "server.services.notifications_service.notification_configurator.KeywordRepository"
+    )
+    def test_toggle_keyword_exception(self, mock_repo):
+        mock_repo.return_value.toggle_keyword.side_effect = Exception("DB error")
+        self.service.keyword_repo = mock_repo.return_value
+        with self.assertRaises(Exception):
+            self.service.toggle_keyword(1, "kw")
+
+    @patch(
+        "server.services.notifications_service.notification_configurator.KeywordRepository"
+    )
+    def test_get_user_keywords_exception(self, mock_repo):
+        mock_repo.return_value.get_keywords_for_user.side_effect = Exception("DB error")
+        self.service.keyword_repo = mock_repo.return_value
+        with self.assertRaises(Exception):
+            self.service.get_user_keywords(1)
+
+    @patch(
+        "server.services.notifications_service.notification_configurator.CategoryRepository"
+    )
+    def test_get_user_categories_exception(self, mock_repo):
+        mock_repo.return_value.get_user_categories.side_effect = Exception("DB error")
+        self.service.category_repo = mock_repo.return_value
+        with self.assertRaises(Exception):
+            self.service.get_user_categories(1)
+
 
 if __name__ == "__main__":
     unittest.main()
