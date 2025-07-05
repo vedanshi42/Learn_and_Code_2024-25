@@ -1,6 +1,7 @@
 from client.services.article_client import ArticleClient
 from server.repositories.feedback_repository import FeedbackService
 from tabulate import tabulate
+from client.helpers.ui_helpers import UIHelpers
 
 
 class ArticleUI:
@@ -24,10 +25,18 @@ class ArticleUI:
     def _get_filter_option(self):
         print("1. No Filter\n2. Filter by Category\n3. Filter by Date")
         option = input("Choose filter: ").strip()
+
         if option == '2':
             return input("Enter Category: ").strip()
+
         elif option == '3':
-            return input("Enter Date (YYYY-MM-DD): ").strip()
+            input_date = input("Enter Date (YYYY-MM-DD): ").strip()
+            if input_date:
+                try:
+                    return UIHelpers.validate_date_format(input_date)
+                except ValueError as e:
+                    print(f"Invalid date format: {e}")
+            return None
         return None
 
     def _get_sort_option(self):

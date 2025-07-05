@@ -54,8 +54,9 @@ class NotificationUI:
                 break
             elif ch == str(len(categories) + 1):
                 new_cat = input("Enter new category name: ").strip()
+
                 resp = self.client.add_category_for_user(user_id, new_cat)
-                if isinstance(resp, dict) and resp.get('error'):
+                if resp.get('error'):
                     print(f"Error: {resp['error']}")
                 else:
                     print("Category added.")

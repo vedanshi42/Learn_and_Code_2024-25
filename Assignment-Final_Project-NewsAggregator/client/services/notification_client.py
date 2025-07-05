@@ -6,7 +6,8 @@ class NotificationClient:
 
     def send_all_user_notifications(self):
         try:
-            return requests.post(f"{self.BASE_URL}/users/notifications/send")
+            res = requests.post(f"{self.BASE_URL}/users/notifications/send")
+            return res.json() if res.ok else {"error": res.json().get("detail", "Failed to send notifications")}
         except Exception as e:
             return {"error": str(e)}
 
@@ -26,13 +27,18 @@ class NotificationClient:
 
     def add_category_for_user(self, user_id, category):
         try:
-            return requests.post(f"{self.BASE_URL}/users/{user_id}/categories", json={"user_id": user_id, "category": category})
+            res = requests.post(
+                f"{self.BASE_URL}/users/{user_id}/categories",
+                json={"user_id": user_id, "category": category}
+            )
+            return res.json() if res.ok else {"error": res.json().get("detail", "Failed to add category")}
         except Exception as e:
             return {"error": str(e)}
 
     def toggle_category(self, user_id, category):
         try:
-            return requests.patch(f"{self.BASE_URL}/users/{user_id}/categories/{category}")
+            res = requests.patch(f"{self.BASE_URL}/users/{user_id}/categories/{category}")
+            return res.json() if res.ok else {"error": res.json().get("detail", "Failed to toggle category")}
         except Exception as e:
             return {"error": str(e)}
 
@@ -45,12 +51,17 @@ class NotificationClient:
 
     def add_keyword_for_user(self, user_id, keyword):
         try:
-            return requests.post(f"{self.BASE_URL}/users/{user_id}/keywords", json={"user_id": user_id, "keyword": keyword})
+            res = requests.post(
+                f"{self.BASE_URL}/users/{user_id}/keywords",
+                json={"user_id": user_id, "keyword": keyword}
+            )
+            return res.json() if res.ok else {"error": res.json().get("detail", "Failed to add keyword")}
         except Exception as e:
             return {"error": str(e)}
 
     def toggle_keyword(self, user_id, keyword):
         try:
-            return requests.patch(f"{self.BASE_URL}/users/{user_id}/keywords/{keyword}")
+            res = requests.patch(f"{self.BASE_URL}/users/{user_id}/keywords/{keyword}")
+            return res.json() if res.ok else {"error": res.json().get("detail", "Failed to toggle keyword")}
         except Exception as e:
             return {"error": str(e)}
