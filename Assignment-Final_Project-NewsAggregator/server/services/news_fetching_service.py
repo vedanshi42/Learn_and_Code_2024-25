@@ -3,9 +3,9 @@ from server.repositories.external_api_repository import ExternalAPIRepository
 from server.repositories.category_repository import CategoryRepository
 from server.repositories.article_repository import ArticleRepository
 from server.exceptions.api_exception import ApiException
-from server.services.api_server.news_api_service import NewsAPIService
-from server.services.api_server.the_news_api_service import TheNewsAPIService
-from server.services.article_categorizing_service import ArticleCategorizer
+from server.integrations.news_api_service import NewsAPIService
+from server.integrations.the_news_api_service import TheNewsAPIService
+from server.utils.categorizer import ArticleCategorizer
 
 
 class NewsFetcher:
@@ -36,7 +36,11 @@ class NewsFetcher:
         print(f"TheNewsAPI Articles Fetched: {len(articles_thenewsapi)}")
 
         combined_articles = articles_newsapi + articles_thenewsapi
-        categorized_articles = self._assign_and_register_categories(combined_articles)
+        try:
+            categorized_articles = self.categorizer.categorize_articles(combined_articles)
+        except Exception as e:
+            print(f"Categorizer Error: {e}")
+            categorized_articles = []
 
         return categorized_articles
 
@@ -54,10 +58,6 @@ class NewsFetcher:
         return articles
 
     def _fetch_from_thenewsapi(self):
-        articles = self.thenewsapi_service.fetch_top_news()
+        articles = self.thenewsapi_service.fetch_articles()
         self.api_repo.update_status("TheNewsAPI", "Active")
         return articles
-
-    def _assign_and_register_categories(self, articles):
-        categorized_articles = self.categorizer.categorize_articles(articles)
-        return categorized_articles

@@ -1,17 +1,33 @@
 from server.repositories.user_preference_repository import UserPreferenceRepository
-from server.services.article_scoring_service import ArticleScorer
+from server.repositories.article_repository import ArticleRepository
+from server.utils.scorer import ArticleScorer
+from server.config.logging_config import news_agg_logger
 
 
 class PersonalizationService:
     def __init__(self):
         self.pref_repo = UserPreferenceRepository()
+        self.article_repo = ArticleRepository()
+
+    def get_and_score_recommended_articles(self, user_id: int):
+        try:
+            articles = self.article_repo.get_recommended_articles(user_id)
+            return self.score_articles(user_id, articles)
+        except Exception as e:
+            news_agg_logger.error(f"Error fetching or scoring recommended articles for user_id={user_id}: {e}")
+            raise Exception(f"Failed to get or score recommended articles: {e}")
 
     def score_articles(self, user_id: int, articles: list[dict]):
-        cats = self.pref_repo.get_liked_categories(user_id)
-        keywords = self.pref_repo.get_enabled_keywords(user_id)
-        disliked_kw, disliked_urls = self.pref_repo.get_disliked_keywords_and_urls(user_id)
+        try:
+            liked_categories = self.pref_repo.get_liked_categories(user_id)
+            disliked_categories = self.pref_repo.get_disliked_categories(user_id)
+            liked_keywords = self.pref_repo.get_liked_keywords(user_id)
+            disliked_keywords = self.pref_repo.get_disliked_keywords(user_id)
+        except Exception as e:
+            news_agg_logger.error(f"Error fetching user preferences for user_id={user_id}: {e}")
+            raise Exception(f"Failed to fetch user preferences for scoring: {e}")
 
-        scorer = ArticleScorer(cats, keywords, disliked_kw, disliked_urls)
+        scorer = ArticleScorer(liked_categories, liked_keywords, disliked_keywords, disliked_categories=disliked_categories)
 
         for article in articles:
             article["score"] = scorer.score(article)
