@@ -4,9 +4,10 @@ from server.repositories.category_repository import CategoryRepository
 from server.repositories.user_repository import UserRepository
 from server.repositories.notification_repository import NotificationRepository
 from server.config.logging_config import news_agg_logger
+from server.interfaces.services_interfaces.i_notification_updater_interface import INotificationUpdater
 
 
-class NotificationsUpdater:
+class NotificationsUpdater(INotificationUpdater):
     def __init__(self):
         self.search_article_repo = SearchArticleRepository()
         self.keyword_repo = KeywordRepository()

@@ -6,9 +6,10 @@ from server.exceptions.api_exception import ApiException
 from server.integrations.news_api_service import NewsAPIService
 from server.integrations.the_news_api_service import TheNewsAPIService
 from server.utils.categorizer import ArticleCategorizer
+from server.interfaces.services_interfaces.i_news_fetching_service_interface import INewsFetchingService
 
 
-class NewsFetcher:
+class NewsFetcher(INewsFetchingService):
     def __init__(self):
         self.api_repo = ExternalAPIRepository()
         self.category_repo = CategoryRepository()

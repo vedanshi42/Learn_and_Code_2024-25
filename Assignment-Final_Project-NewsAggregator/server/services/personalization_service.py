@@ -2,9 +2,10 @@ from server.repositories.user_preference_repository import UserPreferenceReposit
 from server.repositories.article_repository import ArticleRepository
 from server.utils.scorer import ArticleScorer
 from server.config.logging_config import news_agg_logger
+from server.interfaces.services_interfaces.i_personalization_service_interface import IPersonalizationService
 
 
-class PersonalizationService:
+class PersonalizationService(IPersonalizationService):
     def __init__(self):
         self.pref_repo = UserPreferenceRepository()
         self.article_repo = ArticleRepository()

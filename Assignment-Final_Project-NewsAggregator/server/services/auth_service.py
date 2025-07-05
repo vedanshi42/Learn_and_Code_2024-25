@@ -2,9 +2,10 @@ from server.repositories.user_repository import UserRepository
 from server.utils.hasher import PasswordService
 from server.exceptions.repository_exception import RepositoryException
 from server.config.logging_config import news_agg_logger
+from server.interfaces.services_interfaces.i_auth_service_interface import IAuthService
 
 
-class AuthService:
+class AuthService(IAuthService):
     def __init__(self):
         self.user_repo = UserRepository()
         self.password_service = PasswordService()

@@ -2,9 +2,12 @@ from server.repositories.keyword_repository import KeywordRepository
 from server.repositories.category_repository import CategoryRepository
 from server.repositories.notification_repository import NotificationRepository
 from server.config.logging_config import news_agg_logger
+from server.interfaces.services_interfaces.i_notification_configurator_interface import (
+    INotificationConfigurator,
+)
 
 
-class NotificationsConfigurator:
+class NotificationsConfigurator(INotificationConfigurator):
     def __init__(self):
         self.keyword_repo = KeywordRepository()
         self.category_repo = CategoryRepository()

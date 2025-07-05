@@ -2,9 +2,12 @@ from server.repositories.notification_repository import NotificationRepository
 from server.repositories.user_repository import UserRepository
 from server.utils.email_utils import EmailService
 from server.config.logging_config import news_agg_logger
+from server.interfaces.services_interfaces.i_notification_email_service_interface import (
+    INotificationEmailService,
+)
 
 
-class NotificationEmailService:
+class NotificationEmailService(INotificationEmailService):
     def __init__(self):
         self.notifications_repo = NotificationRepository()
         self.user_repo = UserRepository()

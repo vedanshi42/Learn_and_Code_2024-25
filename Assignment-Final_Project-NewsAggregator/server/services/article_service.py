@@ -4,9 +4,10 @@ from server.repositories.user_saved_article_repository import UserSavedArticleRe
 from server.repositories.feedback_repository import FeedbackService
 from server.repositories.reporting_repository import ReportingService
 from server.exceptions.repository_exception import RepositoryException
+from server.interfaces.services_interfaces.i_article_service_interface import IArticleService
 
 
-class ArticleService:
+class ArticleService(IArticleService):
     def __init__(self):
         self.article_repo = ArticleRepository()
         self.search_repo = SearchArticleRepository()
