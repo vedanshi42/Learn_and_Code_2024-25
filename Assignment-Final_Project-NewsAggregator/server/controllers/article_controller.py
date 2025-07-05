@@ -11,7 +11,7 @@ class ArticleActionRequest(BaseModel):
     article_id: int
 
 
-@router.get("/headlines")
+@router.get("/articles/headlines")
 def get_headlines(filter_by: str = None, sort_by: str = None, user_id: int = None):
     try:
         return article_service.get_headlines(user_id=user_id, filter_by=filter_by, sort_by=sort_by)
@@ -19,7 +19,7 @@ def get_headlines(filter_by: str = None, sort_by: str = None, user_id: int = Non
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/recommended")
+@router.get("/articles/recommended")
 def get_recommended_articles(user_id: int):
     try:
         return article_service.get_recommended_articles(user_id)
@@ -27,25 +27,37 @@ def get_recommended_articles(user_id: int):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.post("/save")
-def save_article(req: ArticleActionRequest):
-    article_service.save_article(req.user_id, req.article_id)
-    return {"status": "saved"}
+@router.post("/users/{user_id}/saved-articles")
+def save_article(user_id: int, req: ArticleActionRequest):
+    try:
+        article_service.save_article(user_id, req.article_id)
+        return {"status": "saved"}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
-@router.post("/like")
-def like_article(req: ArticleActionRequest):
-    article_service.like_article(req.user_id, req.article_id)
-    return {"status": "liked"}
+@router.post("/articles/{article_id}/likes")
+def like_article(article_id: int, req: ArticleActionRequest):
+    try:
+        article_service.like_article(req.user_id, article_id)
+        return {"status": "liked"}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
-@router.post("/dislike")
-def dislike_article(req: ArticleActionRequest):
-    article_service.dislike_article(req.user_id, req.article_id)
-    return {"status": "disliked"}
+@router.post("/articles/{article_id}/dislikes")
+def dislike_article(article_id: int, req: ArticleActionRequest):
+    try:
+        article_service.dislike_article(req.user_id, article_id)
+        return {"status": "disliked"}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
-@router.post("/report")
-def report_article(req: ArticleActionRequest):
-    article_service.report_article(req.user_id, req.article_id)
-    return {"status": "reported"}
+@router.post("/articles/{article_id}/reports")
+def report_article(article_id: int, req: ArticleActionRequest):
+    try:
+        article_service.report_article(req.user_id, article_id)
+        return {"status": "reported"}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
