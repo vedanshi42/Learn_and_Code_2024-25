@@ -16,10 +16,6 @@ INSERT_USER_FEEDBACK = '''
     VALUES (%s, %s, %s)
 '''
 
-SELECT_FEEDBACK_COUNTS = '''
-    SELECT likes, dislikes FROM feedback WHERE article_id = %s
-'''
-
 INSERT_OR_UPDATE_FEEDBACK = '''
     INSERT INTO feedback (article_id, {column})
     VALUES (%s, %s)

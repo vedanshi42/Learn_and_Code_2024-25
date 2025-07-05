@@ -1,14 +1,10 @@
 from fastapi import APIRouter, HTTPException
 from server.services.article_service import ArticleService
-from pydantic import BaseModel
+from server.models.article import ArticleActionRequest
+
 
 router = APIRouter()
 article_service = ArticleService()
-
-
-class ArticleActionRequest(BaseModel):
-    user_id: int
-    article_id: int
 
 
 @router.get("/articles/headlines")

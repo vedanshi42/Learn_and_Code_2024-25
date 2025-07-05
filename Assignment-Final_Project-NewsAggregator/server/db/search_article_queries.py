@@ -19,17 +19,6 @@ FIND_ARTICLES_BY_CATEGORY_OR_KEYWORD = '''
     ORDER BY a.date_published DESC
 '''
 
-FIND_TODAY_ARTICLES = '''
-    SELECT DISTINCT article_id, title, source_url, date_published FROM articles
-    WHERE date_published::date = CURRENT_DATE
-    ORDER BY date_published DESC
-'''
-
-FIND_BY_DATE_RANGE = '''
-    SELECT DISTINCT article_id, title, source_url, date_published FROM articles
-    WHERE date_published BETWEEN %s AND %s
-    ORDER BY date_published DESC
-'''
 
 SEARCH_BY_KEYWORD = '''
     SELECT DISTINCT article_id, title, source_url, date_published FROM articles

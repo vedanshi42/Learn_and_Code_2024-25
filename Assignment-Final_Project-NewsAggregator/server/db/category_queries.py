@@ -1,7 +1,6 @@
 # SQL queries for CategoryRepository
 
 ADD_CATEGORY = "INSERT INTO categories (name) VALUES (%s) ON CONFLICT DO NOTHING"
-GET_ALL_CATEGORIES = "SELECT name FROM categories"
 GET_ALL_CATEGORIES_WITH_STATUS = '''
     SELECT DISTINCT c.name,
         (CASE WHEN c.is_enabled_by_admin IS TRUE THEN 'Enabled'
