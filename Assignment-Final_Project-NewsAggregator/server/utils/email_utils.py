@@ -8,10 +8,10 @@ class EmailService:
     def send_email(self, to_email: str, subject: str, body: str):
         try:
             msg = MIMEMultipart()
-            msg['From'] = EMAIL_USER
-            msg['To'] = to_email
-            msg['Subject'] = subject
-            msg.attach(MIMEText(body, 'plain'))
+            msg["From"] = EMAIL_USER
+            msg["To"] = to_email
+            msg["Subject"] = subject
+            msg.attach(MIMEText(body, "plain"))
 
             server = smtplib.SMTP(EMAIL_HOST, EMAIL_PORT)
             server.starttls()

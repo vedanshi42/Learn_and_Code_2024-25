@@ -7,7 +7,7 @@ from sklearn.naive_bayes import MultinomialNB
 
 def load_keyword_data(path="docs/category_keywords.csv"):
     texts, labels = [], []
-    with open(path, newline='') as f:
+    with open(path, newline="") as f:
         reader = csv.DictReader(f)
         for row in reader:
             texts.append(row["keyword"].lower())

@@ -16,8 +16,12 @@ class NewsFetcher:
         self.article_repo = ArticleRepository()
 
         keys = self.api_repo.get_api_keys()
-        self.newsapi_service = NewsAPIService("https://newsapi.org", keys.get("NewsAPI"))
-        self.thenewsapi_service = TheNewsAPIService("https://api.thenewsapi.com", keys.get("TheNewsAPI"))
+        self.newsapi_service = NewsAPIService(
+            "https://newsapi.org", keys.get("NewsAPI")
+        )
+        self.thenewsapi_service = TheNewsAPIService(
+            "https://api.thenewsapi.com", keys.get("TheNewsAPI")
+        )
 
     def fetch_all(self):
         try:
@@ -37,7 +41,9 @@ class NewsFetcher:
 
         combined_articles = articles_newsapi + articles_thenewsapi
         try:
-            categorized_articles = self.categorizer.categorize_articles(combined_articles)
+            categorized_articles = self.categorizer.categorize_articles(
+                combined_articles
+            )
         except Exception as e:
             print(f"Categorizer Error: {e}")
             categorized_articles = []
@@ -47,8 +53,10 @@ class NewsFetcher:
     def _fetch_from_newsapi(self):
         last_updated = self.api_repo.get_last_accessed("NewsAPI")
         current_time = datetime.now(UTC)
-        from_str = (last_updated or current_time - timedelta(hours=3)).strftime('%Y-%m-%d-%H-%M-%S')
-        to_str = current_time.strftime('%Y-%m-%d-%H-%M-%S')
+        from_str = (last_updated or current_time - timedelta(hours=3)).strftime(
+            "%Y-%m-%d-%H-%M-%S"
+        )
+        to_str = current_time.strftime("%Y-%m-%d-%H-%M-%S")
 
         articles = self.newsapi_service.fetch_articles(
             from_date=from_str, to_date=to_str

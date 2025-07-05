@@ -14,9 +14,13 @@ class ArticleService:
         self.feedback_repo = FeedbackService()
         self.report_repo = ReportingService()
 
-    def get_headlines(self, filter_by=None, sort_by=None, user_id=None, from_date=None, to_date=None):
+    def get_headlines(
+        self, filter_by=None, sort_by=None, user_id=None, from_date=None, to_date=None
+    ):
         try:
-            return self.article_repo.get_filtered_articles(filter_by, sort_by, user_id, from_date, to_date)
+            return self.article_repo.get_filtered_articles(
+                filter_by, sort_by, user_id, from_date, to_date
+            )
         except RepositoryException as e:
             raise e
 

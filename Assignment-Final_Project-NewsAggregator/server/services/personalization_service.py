@@ -14,7 +14,9 @@ class PersonalizationService:
             articles = self.article_repo.get_recommended_articles(user_id)
             return self.score_articles(user_id, articles)
         except Exception as e:
-            news_agg_logger.error(f"Error fetching or scoring recommended articles for user_id={user_id}: {e}")
+            news_agg_logger.error(
+                f"Error fetching or scoring recommended articles for user_id={user_id}: {e}"
+            )
             raise Exception(f"Failed to get or score recommended articles: {e}")
 
     def score_articles(self, user_id: int, articles: list[dict]):
@@ -24,12 +26,23 @@ class PersonalizationService:
             liked_keywords = self.pref_repo.get_liked_keywords(user_id)
             disliked_keywords = self.pref_repo.get_disliked_keywords(user_id)
         except Exception as e:
-            news_agg_logger.error(f"Error fetching user preferences for user_id={user_id}: {e}")
+            news_agg_logger.error(
+                f"Error fetching user preferences for user_id={user_id}: {e}"
+            )
             raise Exception(f"Failed to fetch user preferences for scoring: {e}")
 
-        scorer = ArticleScorer(liked_categories, liked_keywords, disliked_keywords, disliked_categories=disliked_categories)
+        scorer = ArticleScorer(
+            liked_categories,
+            liked_keywords,
+            disliked_keywords,
+            disliked_categories=disliked_categories,
+        )
 
         for article in articles:
             article["score"] = scorer.score(article)
 
-        return [a for a in sorted(articles, key=lambda x: x["score"], reverse=True) if a["score"] > -3]
+        return [
+            a
+            for a in sorted(articles, key=lambda x: x["score"], reverse=True)
+            if a["score"] > -3
+        ]

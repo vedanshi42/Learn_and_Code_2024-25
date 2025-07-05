@@ -14,28 +14,36 @@ class NotificationsConfigurator:
         try:
             self.keyword_repo.add_keyword_for_user(user_id, keyword)
         except Exception as e:
-            news_agg_logger(40, f"Failed to add keyword '{keyword}' for user {user_id}: {e}")
+            news_agg_logger(
+                40, f"Failed to add keyword '{keyword}' for user {user_id}: {e}"
+            )
             raise
 
     def add_category_for_user(self, user_id: int, category: str):
         try:
             self.category_repo.subscribe_user_to_category(user_id, category)
         except Exception as e:
-            news_agg_logger(40, f"Failed to add category '{category}' for user {user_id}: {e}")
+            news_agg_logger(
+                40, f"Failed to add category '{category}' for user {user_id}: {e}"
+            )
             raise
 
     def toggle_category(self, user_id: int, category: str):
         try:
             self.category_repo.toggle_category(user_id, category)
         except Exception as e:
-            news_agg_logger(40, f"Failed to toggle category '{category}' for user {user_id}: {e}")
+            news_agg_logger(
+                40, f"Failed to toggle category '{category}' for user {user_id}: {e}"
+            )
             raise
 
     def toggle_keyword(self, user_id: int, keyword: str):
         try:
             self.keyword_repo.toggle_keyword(user_id, keyword)
         except Exception as e:
-            news_agg_logger(40, f"Failed to toggle keyword '{keyword}' for user {user_id}: {e}")
+            news_agg_logger(
+                40, f"Failed to toggle keyword '{keyword}' for user {user_id}: {e}"
+            )
             raise
 
     def get_user_keywords(self, user_id: int):

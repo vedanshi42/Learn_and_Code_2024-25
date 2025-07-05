@@ -8,9 +8,21 @@ article_service = ArticleService()
 
 
 @router.get("/articles/headlines")
-def get_headlines(filter_by: str = None, sort_by: str = None, user_id: int = None, from_date: str = None, to_date: str = None):
+def get_headlines(
+    filter_by: str = None,
+    sort_by: str = None,
+    user_id: int = None,
+    from_date: str = None,
+    to_date: str = None,
+):
     try:
-        return article_service.get_headlines(user_id=user_id, filter_by=filter_by, sort_by=sort_by, from_date=from_date, to_date=to_date)
+        return article_service.get_headlines(
+            user_id=user_id,
+            filter_by=filter_by,
+            sort_by=sort_by,
+            from_date=from_date,
+            to_date=to_date,
+        )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

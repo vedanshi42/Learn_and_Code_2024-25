@@ -3,7 +3,11 @@ from server.repositories.external_api_repository import ExternalAPIRepository
 from server.repositories.category_repository import CategoryRepository
 from server.repositories.keyword_repository import KeywordRepository
 from server.repositories.article_repository import ArticleRepository
-from server.models.admin_models import UpdateKeyRequest, CategoryRequest, DeleteArticleRequest
+from server.models.admin_models import (
+    UpdateKeyRequest,
+    CategoryRequest,
+    DeleteArticleRequest,
+)
 
 router = APIRouter(prefix="/admin", tags=["Admin"])
 

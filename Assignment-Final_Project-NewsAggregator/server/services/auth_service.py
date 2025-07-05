@@ -25,7 +25,9 @@ class AuthService:
     def login(self, email: str, password: str):
         try:
             user = self.user_repo.get_user_by_email(email)
-            if user and self.password_service.verify_password(password, user['password']):
+            if user and self.password_service.verify_password(
+                password, user["password"]
+            ):
                 return user
             else:
                 raise ValueError("Invalid email or password")

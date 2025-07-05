@@ -12,7 +12,7 @@ class TestMLCategoryPredictor:
             content="AI and machine learning breakthrough changes everything.",
             category=None,
             source_url="https://example.com/ai-news",
-            date_published="2025-06-18T10:00:00Z"
+            date_published="2025-06-18T10:00:00Z",
         )
         assert self.predictor.predict(article) == "Technology"
 
@@ -22,7 +22,7 @@ class TestMLCategoryPredictor:
             content="Nothing here is obvious.",
             category=None,
             source_url="https://example.com/mystery",
-            date_published="2025-06-18T10:00:00Z"
+            date_published="2025-06-18T10:00:00Z",
         )
         result = self.predictor.predict(article)
         assert isinstance(result, str)

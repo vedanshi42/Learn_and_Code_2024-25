@@ -21,17 +21,17 @@ class UserUI:
             print("5. Notifications")
             print("6. Logout")
             ch = input("Choose: ")
-            if ch == '1':
+            if ch == "1":
                 self.article_ui.view_headlines(user)
-            elif ch == '2':
+            elif ch == "2":
                 self.article_ui.view_recommended_articles(user)
-            elif ch == '3':
+            elif ch == "3":
                 self.saved_ui.manage(user)
-            elif ch == '4':
+            elif ch == "4":
                 self.search_ui.search(user)
-            elif ch == '5':
+            elif ch == "5":
                 self.notif_ui.configure(user)
-            elif ch == '6':
+            elif ch == "6":
                 break
             else:
                 print("Invalid option. Please select a valid option.")

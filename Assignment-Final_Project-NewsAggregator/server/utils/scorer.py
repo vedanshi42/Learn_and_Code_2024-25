@@ -1,6 +1,11 @@
 class ArticleScorer:
-    def __init__(self, preferred_categories: set[str], keywords: set[str],
-                 disliked_keywords: set[str], disliked_categories: set[str] = None):
+    def __init__(
+        self,
+        preferred_categories: set[str],
+        keywords: set[str],
+        disliked_keywords: set[str],
+        disliked_categories: set[str] = None,
+    ):
         self.preferred_categories = preferred_categories or set()
         self.keywords = keywords or set()
         self.disliked_keywords = disliked_keywords or set()
@@ -8,9 +13,9 @@ class ArticleScorer:
 
     def score(self, article: dict):
         score = 0
-        title = article['title'].lower()
-        content = article['content'].lower() if article.get('content') else ""
-        category = article.get('category', '').lower()
+        title = article["title"].lower()
+        content = article["content"].lower() if article.get("content") else ""
+        category = article.get("category", "").lower()
 
         if category in self.preferred_categories:
             score += 2

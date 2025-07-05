@@ -1,11 +1,21 @@
 from datetime import datetime, UTC
 from contextlib import contextmanager
 from server.db.db_connection import DBConnection
-from server.interfaces.repository_interfaces.i_external_api_repository import IExternalAPIRepository
-from server.db.external_api_queries import (
-    UPDATE_STATUS, GET_LAST_ACCESSED, GET_ALL_STATUSES, GET_ALL_KEYS, UPDATE_API_KEY, GET_API_KEYS
+from server.interfaces.repository_interfaces.i_external_api_repository import (
+    IExternalAPIRepository,
 )
-from server.exceptions.repository_exception import RepositoryException, APINameNotFoundException
+from server.db.external_api_queries import (
+    UPDATE_STATUS,
+    GET_LAST_ACCESSED,
+    GET_ALL_STATUSES,
+    GET_ALL_KEYS,
+    UPDATE_API_KEY,
+    GET_API_KEYS,
+)
+from server.exceptions.repository_exception import (
+    RepositoryException,
+    APINameNotFoundException,
+)
 from server.config.logging_config import news_agg_logger
 
 
@@ -27,7 +37,9 @@ class ExternalAPIRepository(IExternalAPIRepository):
                 cur.execute(UPDATE_STATUS, (status, datetime.now(UTC), name))
 
                 if cur.rowcount == 0:
-                    news_agg_logger(40, f"API name '{name}' not found for status update.")
+                    news_agg_logger(
+                        40, f"API name '{name}' not found for status update."
+                    )
                     raise APINameNotFoundException(f"API name '{name}' not found.")
 
                 db.commit()
@@ -59,7 +71,7 @@ class ExternalAPIRepository(IExternalAPIRepository):
                     {
                         "api_name": row["api_name"],
                         "status": row["status"],
-                        "last_accessed": row["last_accessed"]
+                        "last_accessed": row["last_accessed"],
                     }
                     for row in cur.fetchall()
                 ]
@@ -79,7 +91,7 @@ class ExternalAPIRepository(IExternalAPIRepository):
                     {
                         "api_name": row["api_name"],
                         "api_key": row["api_key"],
-                        "last_accessed": row["last_accessed"]
+                        "last_accessed": row["last_accessed"],
                     }
                     for row in cur.fetchall()
                 ]
@@ -96,7 +108,9 @@ class ExternalAPIRepository(IExternalAPIRepository):
                 cur.execute(UPDATE_API_KEY, (api_key, api_name))
 
                 if cur.rowcount == 0:
-                    news_agg_logger(40, f"API name '{api_name}' not found for API key update.")
+                    news_agg_logger(
+                        40, f"API name '{api_name}' not found for API key update."
+                    )
                     raise APINameNotFoundException(f"API name '{api_name}' not found.")
 
                 db.commit()
@@ -111,7 +125,7 @@ class ExternalAPIRepository(IExternalAPIRepository):
         try:
             with get_db_cursor() as (cur, db):
                 cur.execute(GET_API_KEYS)
-                result = {row['api_name']: row['api_key'] for row in cur.fetchall()}
+                result = {row["api_name"]: row["api_key"] for row in cur.fetchall()}
 
                 news_agg_logger(20, "External APIs details fetched")
                 return result

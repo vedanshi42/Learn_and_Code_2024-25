@@ -16,7 +16,7 @@ class TestArticleCategorizerFlow:
             content="Machine learning and neural networks in education",
             category=None,
             source_url="https://example.com/ml-news",
-            date_published="2025-06-18T10:00:00Z"
+            date_published="2025-06-18T10:00:00Z",
         )
 
         # Categorize

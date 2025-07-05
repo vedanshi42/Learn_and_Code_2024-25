@@ -1,7 +1,14 @@
 from fastapi import APIRouter, HTTPException
-from server.services.notifications_service.notification_email_service import NotificationEmailService
-from server.services.notifications_service.notification_configurator import NotificationsConfigurator
-from server.models.notification_models import ToggleCategoryPayload, ToggleKeywordPayload
+from server.services.notifications_service.notification_email_service import (
+    NotificationEmailService,
+)
+from server.services.notifications_service.notification_configurator import (
+    NotificationsConfigurator,
+)
+from server.models.notification_models import (
+    ToggleCategoryPayload,
+    ToggleKeywordPayload,
+)
 
 
 router = APIRouter()

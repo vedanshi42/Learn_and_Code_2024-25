@@ -7,19 +7,21 @@ class SearchArticleUI:
 
     def search(self, user):
         while True:
-            print("1. Search by Keyword\n2. Search by Category\n3. Search by Date\n4. Back")
+            print(
+                "1. Search by Keyword\n2. Search by Category\n3. Search by Date\n4. Back"
+            )
             ch = input("Choose: ")
 
-            if ch == '1':
+            if ch == "1":
                 term = input("Enter keyword: ")
                 result = self.client.search_articles(keyword=term)
-            elif ch == '2':
+            elif ch == "2":
                 term = input("Enter category: ")
                 result = self.client.search_articles(category=term)
-            elif ch == '3':
+            elif ch == "3":
                 date = input("Enter date (YYYY-MM-DD): ")
                 result = self.client.search_articles(date=date)
-            elif ch == '4':
+            elif ch == "4":
                 return
             else:
                 print("Invalid option. Please select a valid option.")
@@ -32,4 +34,6 @@ class SearchArticleUI:
                 print("No articles found.")
                 continue
             for article in result:
-                print(f"{article['article_id']} - {article['title']}, url - {article['source_url']}")
+                print(
+                    f"{article['article_id']} - {article['title']}, url - {article['source_url']}"
+                )

@@ -19,12 +19,21 @@ class NotificationsUpdater:
             users = self.user_repo.get_all_users()
             for user in users:
                 try:
-                    keywords = self.keyword_repo.get_keywords_for_user(user['user_id'])
-                    categories = self.category_repo.get_user_categories(user['user_id'])
-                    matched_articles = self.search_article_repo.find_articles_by_category_or_keyword(categories, keywords)
-                    self.notification_repo.replace_notifications_for_user(user['user_id'], matched_articles)
+                    keywords = self.keyword_repo.get_keywords_for_user(user["user_id"])
+                    categories = self.category_repo.get_user_categories(user["user_id"])
+                    matched_articles = (
+                        self.search_article_repo.find_articles_by_category_or_keyword(
+                            categories, keywords
+                        )
+                    )
+                    self.notification_repo.replace_notifications_for_user(
+                        user["user_id"], matched_articles
+                    )
                 except Exception as e:
-                    news_agg_logger(40, f"Failed to update notifications for user {user['email']}: {e}")
+                    news_agg_logger(
+                        40,
+                        f"Failed to update notifications for user {user['email']}: {e}",
+                    )
             news_agg_logger(20, "Notifications updated for all users.")
         except Exception as e:
             news_agg_logger(40, f"Failed to update notifications for all users: {e}")

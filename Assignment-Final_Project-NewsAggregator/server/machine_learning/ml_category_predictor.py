@@ -8,7 +8,9 @@ class MLCategoryPredictor(ICategoryPredictor):
     def __init__(self):
         model_path = os.path.join("docs", "trained_category_model.joblib")
         if not os.path.exists(model_path):
-            raise FileNotFoundError("Trained model not found. Run train_category_model.py first.")
+            raise FileNotFoundError(
+                "Trained model not found. Run train_category_model.py first."
+            )
         self.model, self.vectorizer = joblib.load(model_path)
 
     def predict(self, article: Article):

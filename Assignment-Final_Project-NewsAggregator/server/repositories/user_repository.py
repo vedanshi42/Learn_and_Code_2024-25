@@ -1,8 +1,11 @@
 from contextlib import contextmanager
 from server.db.db_connection import DBConnection
 from server.db.user_queries import (
-    GET_USER_BY_EMAIL, CREATE_USER, GET_USER_BY_EMAIL_AFTER_CREATE,
-    EMAIL_EXISTS, GET_ALL_USERS
+    GET_USER_BY_EMAIL,
+    CREATE_USER,
+    GET_USER_BY_EMAIL_AFTER_CREATE,
+    EMAIL_EXISTS,
+    GET_ALL_USERS,
 )
 from server.interfaces.repository_interfaces.i_user_repository import IUserRepository
 from server.exceptions.repository_exception import RepositoryException
@@ -31,7 +34,7 @@ class UserRepository(IUserRepository):
         except Exception as e:
             raise RepositoryException(f"Failed to get user by email: {e}")
 
-    def create_user(self, username, email, hashed_pw, role='user'):
+    def create_user(self, username, email, hashed_pw, role="user"):
         try:
             with get_db_cursor() as (cur, db):
                 cur.execute(CREATE_USER, (username, email, hashed_pw, role))

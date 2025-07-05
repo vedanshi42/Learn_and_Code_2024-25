@@ -1,10 +1,15 @@
 from contextlib import contextmanager
 from server.db.db_connection import DBConnection
 from server.db.feedback_queries import (
-    SELECT_FEEDBACK_TYPE, UPDATE_USER_FEEDBACK, INSERT_USER_FEEDBACK
+    SELECT_FEEDBACK_TYPE,
+    UPDATE_USER_FEEDBACK,
+    INSERT_USER_FEEDBACK,
 )
 from server.exceptions.repository_exception import RepositoryException
 from server.config.logging_config import news_agg_logger
+from server.interfaces.repository_interfaces.i_feedback_repository import (
+    IFeedbackRepository,
+)
 
 
 @contextmanager
@@ -18,12 +23,12 @@ def get_db_cursor():
         db.close()
 
 
-class FeedbackService:
+class FeedbackService(IFeedbackRepository):
     def like_article(self, user_id: int, article_id: int):
-        self._add_feedback(user_id, article_id, 'like')
+        self._add_feedback(user_id, article_id, "like")
 
     def dislike_article(self, user_id: int, article_id: int):
-        self._add_feedback(user_id, article_id, 'dislike')
+        self._add_feedback(user_id, article_id, "dislike")
 
     def _add_feedback(self, user_id, article_id, action):
         try:
@@ -32,10 +37,12 @@ class FeedbackService:
                 existing = cur.fetchone()
 
                 if existing:
-                    if existing['feedback_type'] == action:
+                    if existing["feedback_type"] == action:
                         return
                     else:
-                        self._update_feedback_counts(cur, article_id, existing['feedback_type'], -1)
+                        self._update_feedback_counts(
+                            cur, article_id, existing["feedback_type"], -1
+                        )
                         self._update_feedback_counts(cur, article_id, action, 1)
                         cur.execute(UPDATE_USER_FEEDBACK, (action, user_id, article_id))
                 else:

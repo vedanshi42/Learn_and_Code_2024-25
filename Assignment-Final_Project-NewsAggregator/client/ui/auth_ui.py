@@ -27,7 +27,9 @@ class AuthUI:
             if UIHelpers.is_valid_email(user_email):
                 break
 
-            print("Invalid email format. Please enter a valid email (e.g. user@example.com).")
+            print(
+                "Invalid email format. Please enter a valid email (e.g. user@example.com)."
+            )
 
         user_password = UIHelpers.get_hidden_password("Password: ")
         user = self.client.signup(user_name, user_email, user_password)

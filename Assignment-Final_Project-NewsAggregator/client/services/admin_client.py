@@ -21,7 +21,10 @@ class AdminClient:
 
     def add_or_update_api_key(self, api_name, new_key):
         try:
-            resp = requests.post(f"{self.BASE_URL}/admin/api-keys", json={"api_name": api_name, "api_key": new_key})
+            resp = requests.post(
+                f"{self.BASE_URL}/admin/api-keys",
+                json={"api_name": api_name, "api_key": new_key},
+            )
             try:
                 data = resp.json()
             except Exception:
@@ -51,7 +54,9 @@ class AdminClient:
 
     def add_category(self, name):
         try:
-            resp = requests.post(f"{self.BASE_URL}/admin/categories", json={"name": name})
+            resp = requests.post(
+                f"{self.BASE_URL}/admin/categories", json={"name": name}
+            )
             try:
                 data = resp.json()
             except Exception:
@@ -126,7 +131,10 @@ class AdminClient:
 
     def delete_article(self, article_id, user_id=None):
         try:
-            resp = requests.delete(f"{self.BASE_URL}/admin/articles/{article_id}", json={"user_id": user_id} if user_id is not None else None)
+            resp = requests.delete(
+                f"{self.BASE_URL}/admin/articles/{article_id}",
+                json={"user_id": user_id} if user_id is not None else None,
+            )
             try:
                 data = resp.json()
             except Exception:

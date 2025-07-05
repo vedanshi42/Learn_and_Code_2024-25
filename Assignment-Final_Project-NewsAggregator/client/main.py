@@ -9,18 +9,18 @@ def home_screen():
         print("1. Login\n2. Signup\n3. Exit")
         user_choice = input("Choose: ")
         auth = AuthUI()
-        if user_choice == '1':
+        if user_choice == "1":
             user = auth.login()
-        elif user_choice == '2':
+        elif user_choice == "2":
             user = auth.signup()
-        elif user_choice == '3':
+        elif user_choice == "3":
             break
         else:
             print("Invalid option. Please select a valid option.")
             continue
 
         if user:
-            if user['role'] == 'admin':
+            if user["role"] == "admin":
                 AdminUI().menu()
             else:
                 UserUI().menu(user)
@@ -30,4 +30,4 @@ if __name__ == "__main__":
     try:
         home_screen()
     except Exception as e:
-        print(f'Error: {e}')
+        print(f"Error: {e}")

@@ -14,20 +14,20 @@ class NotificationUI:
             print("4. Back")
             ch = input("Choose: ")
 
-            if ch == '1':
-                self._view_notifications(user['user_id'])
-            elif ch == '2':
-                self._manage_categories(user['user_id'])
-            elif ch == '3':
-                self._manage_keywords(user['user_id'])
-            elif ch == '4':
+            if ch == "1":
+                self._view_notifications(user["user_id"])
+            elif ch == "2":
+                self._manage_categories(user["user_id"])
+            elif ch == "3":
+                self._manage_keywords(user["user_id"])
+            elif ch == "4":
                 break
             else:
                 print("Invalid option. Please select a valid option.")
 
     def _view_notifications(self, user_id):
         notes = self.client.get_user_notifications(user_id)
-        if not notes or (isinstance(notes, dict) and notes.get('error')):
+        if not notes or (isinstance(notes, dict) and notes.get("error")):
             print("No new notifications.")
             return
         for n in notes[:5]:
@@ -43,20 +43,22 @@ class NotificationUI:
 
             print("\n--- Your Categories ---")
             for idx, c in enumerate(categories, 1):
-                print(f"{idx}. {c['name']} - {'Enabled' if c['is_enabled'] else 'Disabled'}")
+                print(
+                    f"{idx}. {c['name']} - {'Enabled' if c['is_enabled'] else 'Disabled'}"
+                )
 
             print(f"{len(categories) + 1}. Add New Category")
             print("B. Back")
 
             ch = input("Choose: ")
 
-            if ch.lower() == 'b':
+            if ch.lower() == "b":
                 break
             elif ch == str(len(categories) + 1):
                 new_cat = input("Enter new category name: ").strip()
 
                 resp = self.client.add_category_for_user(user_id, new_cat)
-                if resp.get('error'):
+                if resp.get("error"):
                     print(f"Error: {resp['error']}")
                 else:
                     print("Category added.")
@@ -65,12 +67,12 @@ class NotificationUI:
             elif ch.isdigit() and 1 <= int(ch) <= len(categories):
                 selected = categories[int(ch) - 1]
                 resp = self.client.toggle_category(user_id, selected["name"])
-                if isinstance(resp, dict) and resp.get('error'):
+                if isinstance(resp, dict) and resp.get("error"):
                     print(f"Error: {resp['error']}")
                 elif resp:
                     print("Category toggled.")
                 else:
-                    print('Cannot enable admin disabled categories')
+                    print("Cannot enable admin disabled categories")
                 continue
 
             else:
@@ -82,20 +84,22 @@ class NotificationUI:
             print("\n--- Your Keywords ---")
 
             for idx, k in enumerate(keywords, 1):
-                print(f"{idx}. {k['keyword']} - {'Enabled' if k['is_enabled'] else 'Disabled'}")
+                print(
+                    f"{idx}. {k['keyword']} - {'Enabled' if k['is_enabled'] else 'Disabled'}"
+                )
 
             print(f"{len(keywords) + 1}. Add New Keyword")
             print("B. Back")
 
             ch = input("Choose: ")
 
-            if ch.lower() == 'b':
+            if ch.lower() == "b":
                 break
 
             elif ch == str(len(keywords) + 1):
                 new_kw = input("Enter new keyword: ").strip()
                 resp = self.client.add_keyword_for_user(user_id, new_kw)
-                if isinstance(resp, dict) and resp.get('error'):
+                if isinstance(resp, dict) and resp.get("error"):
                     print(f"Error: {resp['error']}")
                 else:
                     print("Keyword added.")
@@ -104,12 +108,12 @@ class NotificationUI:
             elif ch.isdigit() and 1 <= int(ch) <= len(keywords):
                 selected = keywords[int(ch) - 1]
                 resp = self.client.toggle_keyword(user_id, selected["keyword"])
-                if isinstance(resp, dict) and resp.get('error'):
+                if isinstance(resp, dict) and resp.get("error"):
                     print(f"Error: {resp['error']}")
                 elif resp:
                     print("Keyword toggled.")
                 else:
-                    print('Cannot enable admin disabled keywords')
+                    print("Cannot enable admin disabled keywords")
                 continue
 
             else:
