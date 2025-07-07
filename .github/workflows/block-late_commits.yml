@@ -41,13 +41,3 @@ jobs:
             echo "All commits are within the allowed timeframe."
           fi
 """
-
-# Save the workflow file
-file_path = ".github/workflows/block-late-commits.yml"
-import os
-os.makedirs(os.path.dirname(file_path), exist_ok=True)
-with open(file_path, "w") as f:
-    f.write(workflow_content)
-
-print(f"Workflow file has been generated and saved to {file_path}")
-
