@@ -1,4 +1,4 @@
-workflow_content = """name: Block Late Commits
+name: Block Late Commits
 
 on:
   pull_request:
@@ -40,4 +40,3 @@ jobs:
           else
             echo "All commits are within the allowed timeframe."
           fi
-"""
