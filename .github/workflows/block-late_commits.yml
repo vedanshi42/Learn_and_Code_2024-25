@@ -1,0 +1,53 @@
+workflow_content = """name: Block Late Commits
+
+on:
+  pull_request:
+    branches:
+      - Final_Project_News_Aggregator
+    types: [opened, synchronize]
+
+jobs:
+  check-commit-date:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Ensures full history is available
+
+      - name: Get commit dates
+        run: |
+          echo "Checking commits for PR #${{ github.event.pull_request.number }}"
+          git log --pretty=format:"%H %cI" origin/${{ github.event.pull_request.base.ref }}..HEAD > commits.txt
+
+          echo "Commits after deadline:"
+          DEADLINE="2025-07-08T00:00:00Z"
+          VIOLATION=false
+
+          while read line; do
+            COMMIT_HASH=$(echo $line | cut -d' ' -f1)
+            COMMIT_DATE=$(echo $line | cut -d' ' -f2)
+
+            if [[ "$COMMIT_DATE" > "$DEADLINE" ]]; then
+              echo "Commit $COMMIT_HASH is after deadline: $COMMIT_DATE"
+              VIOLATION=true
+            fi
+          done < commits.txt
+
+          if [ "$VIOLATION" = true ]; then
+            echo "One or more commits are after the deadline ($DEADLINE)."
+            exit 1
+          else
+            echo "All commits are within the allowed timeframe."
+          fi
+"""
+
+# Save the workflow file
+file_path = ".github/workflows/block-late-commits.yml"
+import os
+os.makedirs(os.path.dirname(file_path), exist_ok=True)
+with open(file_path, "w") as f:
+    f.write(workflow_content)
+
+print(f"Workflow file has been generated and saved to {file_path}")
+
