@@ -41,6 +41,9 @@ class CategoryRepository(ICategoryRepository):
         try:
             with get_db_cursor() as (cur, db):
                 cur.execute(ADD_CATEGORY, (name,))
+                if cur.rowcount == 0:
+                    news_agg_logger(30, f"Category already exists: {name}")
+                    raise RepositoryException(f"Category '{name}' already exists.")
                 db.commit()
                 news_agg_logger(20, f"Category added: {name}")
         except Exception as e:

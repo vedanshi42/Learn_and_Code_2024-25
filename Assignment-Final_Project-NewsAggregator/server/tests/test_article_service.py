@@ -101,6 +101,23 @@ class TestArticleService(unittest.TestCase):
         with self.assertRaises(Exception):
             service.get_recommended_articles(1)
 
+    def test_insert_articles(self):
+        mock_repo = MagicMock()
+        service = ArticleService(article_repo=mock_repo)
+        articles = [MagicMock(), MagicMock()]
+        service.insert_articles(articles)
+        mock_repo.insert_new_articles.assert_called_with(articles)
+
+    def test_insert_articles_exception(self):
+        mock_repo = MagicMock()
+        mock_repo.insert_new_articles.return_value = None
+        service = ArticleService(article_repo=mock_repo)
+        articles = [MagicMock()]
+        try:
+            service.insert_articles(articles)
+        except Exception:
+            self.fail("insert_articles should not raise when repo logs error")
+
 
 if __name__ == "__main__":
     unittest.main()

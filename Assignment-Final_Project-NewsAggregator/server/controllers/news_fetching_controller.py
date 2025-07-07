@@ -1,13 +1,14 @@
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import JSONResponse
 from server.services.news_fetching_service import NewsFetcher
-from server.repositories.article_repository import ArticleRepository
+from server.services.article_service import ArticleService
 from server.services.notifications_service.notification_updater import (
     NotificationsUpdater,
 )
 
 
 router = APIRouter(tags=["Fetch News"])
+article_service = ArticleService()
 
 
 @router.get("/fetch-news")
@@ -17,7 +18,7 @@ def fetch_news():
         articles = fetcher.fetch_all()
         print("Updating Database")
 
-        ArticleRepository().insert_new_articles(articles)
+        article_service.insert_articles(articles)
         print("Database Refreshed")
 
         NotificationsUpdater().update_notifications_for_all_users()

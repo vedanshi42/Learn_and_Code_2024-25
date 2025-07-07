@@ -61,3 +61,6 @@ class ArticleService(IArticleService):
             return self.article_repo.get_recommended_articles(user_id)
         except RepositoryException as e:
             raise e
+
+    def insert_articles(self, articles):
+        return self.article_repo.insert_new_articles(articles)

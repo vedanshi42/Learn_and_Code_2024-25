@@ -1,19 +1,19 @@
 from fastapi import APIRouter, HTTPException
-from server.repositories.search_article_repository import SearchArticleRepository
+from server.services.search_service import SearchService
 
 router = APIRouter(prefix="/articles", tags=["Search"])
-repo = SearchArticleRepository()
+search_service = SearchService()
 
 
 @router.get("")
 def search_articles(category: str = None, keyword: str = None, date: str = None):
     try:
         if category:
-            return repo.search_by_category(category)
+            return search_service.search_by_category(category)
         elif keyword:
-            return repo.search_by_keyword(keyword)
+            return search_service.search_by_keyword(keyword)
         elif date:
-            return repo.search_by_date(date)
+            return search_service.search_by_date(date)
         else:
             raise HTTPException(status_code=400, detail="No search parameter provided.")
     except Exception as e:

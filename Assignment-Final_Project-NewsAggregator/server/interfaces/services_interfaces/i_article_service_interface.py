@@ -17,3 +17,7 @@ class IArticleService(ABC):
     @abstractmethod
     def dislike_article(self, user_id, article_id):
         pass
+
+    @abstractmethod
+    def insert_articles(self, articles):
+        pass
