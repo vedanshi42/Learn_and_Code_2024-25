@@ -1,4 +1,4 @@
-# SQL queries for ReportingService/Repository
+# SQL queries for Reporting Repository
 
 REPORT_ARTICLE = '''
     INSERT INTO reported_articles (user_id, article_id)

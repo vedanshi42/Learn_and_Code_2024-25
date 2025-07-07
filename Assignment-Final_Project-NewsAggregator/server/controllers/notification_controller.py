@@ -25,7 +25,6 @@ def send_all_user_notifications():
         raise HTTPException(status_code=500, detail=str(e))
 
 
-# Get, add, and toggle categories for a user
 @router.get("/users/{user_id}/categories")
 def get_user_categories(user_id: int):
     try:
@@ -52,7 +51,6 @@ def toggle_user_category(user_id: int, category: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-# Get, add, and toggle keywords for a user
 @router.get("/users/{user_id}/keywords")
 def get_user_keywords(user_id: int):
     try:
@@ -79,7 +77,6 @@ def toggle_user_keyword(user_id: int, keyword: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-# Get notifications for a user
 @router.get("/users/{user_id}/notifications")
 def get_user_notifications(user_id: int):
     try:
