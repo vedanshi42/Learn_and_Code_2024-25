@@ -24,6 +24,16 @@ GET_FILTERED_ARTICLES = '''
     LEFT JOIN feedback f ON a.article_id = f.article_id
     LEFT JOIN categories c ON a.category_id = c.category_id
     WHERE (%s IS NULL OR c.name = %s OR a.date_published::text LIKE %s)
+    AND (c.is_enabled_by_admin IS TRUE)
+    AND (
+        NOT EXISTS (
+            SELECT 1 FROM keywords k
+            WHERE k.is_enabled_by_admin = FALSE
+              AND k.keyword IN (
+                  SELECT regexp_split_to_table(a.title || ' ' || a.content, '\\s+')
+              )
+        )
+    )
     AND a.article_id NOT IN (
       SELECT article_id FROM user_article_feedback
       WHERE user_id = %s AND feedback_type = 'dislike'
@@ -42,6 +52,17 @@ GET_RECOMMENDED_ARTICLES = '''
     FROM articles a
     LEFT JOIN feedback f ON a.article_id = f.article_id
     JOIN categories c ON a.category_id = c.category_id
+    WHERE
+        c.is_enabled_by_admin IS TRUE
+        AND (
+            NOT EXISTS (
+                SELECT 1 FROM keywords k
+                WHERE k.is_enabled_by_admin = FALSE
+                  AND k.keyword IN (
+                      SELECT regexp_split_to_table(a.title || ' ' || a.content, '\\s+')
+                  )
+            )
+        )
     ORDER BY a.date_published DESC
     LIMIT 100
 '''
