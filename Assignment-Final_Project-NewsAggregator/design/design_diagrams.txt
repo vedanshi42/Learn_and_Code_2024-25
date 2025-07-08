@@ -1,0 +1,251 @@
+@startuml
+
+' === USE CASE DIAGRAM ===
+left to right direction
+actor Admin
+actor User
+
+rectangle "Client Application" {
+  User --> (Login)
+  User --> (Sign Up)
+  User --> (View Headlines)
+  User --> (Save Article)
+  User --> (Delete Article)
+  User --> (Back)
+  User --> (Logout)
+  User --> (Search by Keyword)
+  User --> (Search by Category)
+  User --> (Configure Notifications)
+  User --> (View Notifications)
+}
+
+rectangle "Admin Console" {
+  Admin --> (Login)
+  Admin --> (View External Servers)
+  Admin --> (Update Server Config)
+  Admin --> (View Server Details)
+  Admin --> (Add News Category)
+  Admin --> (Back)
+  Admin --> (Logout)
+}
+
+@enduml
+
+' === CLASS DIAGRAM ===
+@startuml
+
+class User {
+  - id: int
+  - username: str
+  - email: str
+  - password: str
+  - role: Role
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+class Article {
+  - id: int
+  - title: str
+  - content: str
+  - category: Category
+  - source_url: str
+  - date_published: datetime
+}
+
+class Category {
+  - id: int
+  - name: str
+}
+
+class Keyword {
+  - id: int
+  - word: str
+}
+
+class SavedArticle {
+  - id: int
+  - user_id: int
+  - article_id: int
+}
+
+class NotificationConfig {
+  - id: int
+  - user_id: int
+  - enabled_categories: List<Category>
+  - keywords: List<Keyword>
+}
+
+class ExternalAPIServer {
+  - id: int
+  - name: str
+  - api_key: str
+  - status: str
+  - last_accessed: datetime
+}
+
+class AuthService {
+  + login(email, password)
+  + signup(username, email, password)
+}
+
+class ArticleService {
+  + getArticlesByDate()
+  + getArticlesByCategory()
+  + getArticlesByKeyword()
+  + saveArticle()
+  + deleteArticle()
+}
+
+class NewsFetcher {
+  + fetchFromNewsAPI()
+  + fetchFromTheNewsAPI()
+  + checkAndAvoidDuplicates()
+}
+
+class NewsCategorizer {
+  + categorize(article)
+}
+
+class NotificationConfigurator {
+  + configure(userId, config)
+}
+
+class NotificationViewer {
+  + getLatestNotifications(userId)
+}
+
+class NotificationUpdater {
+  + clearOldNotifications(userId)
+  + addMatchedArticles(userId, articleList)
+}
+
+class EmailService {
+  + sendEmail(to, subject, body)
+  + formatDigestEmail(articles)
+}
+
+class ExternalAPIServerViewer {
+  + listServers()
+}
+
+class ExternalAPIServerManager {
+  + updateAPIKey(id, key)
+}
+
+class ExternalAPIServerDetails {
+  + getDetails(id)
+}
+
+class CategoryManager {
+  + addCategory(name)
+}
+
+User --> SavedArticle
+User --> NotificationConfig
+NotificationConfig --> Keyword
+NotificationConfig --> Category
+Article --> Category
+AuthService --> User
+ArticleService --> Article
+NotificationConfigurator --> NotificationConfig
+NotificationViewer --> Article
+NotificationUpdater --> Article
+NotificationUpdater --> NotificationConfig
+NotificationUpdater --> User
+EmailService --> Article
+NewsFetcher --> Article
+NewsCategorizer --> Article
+ExternalAPIServerViewer --> ExternalAPIServer
+ExternalAPIServerManager --> ExternalAPIServer
+ExternalAPIServerDetails --> ExternalAPIServer
+CategoryManager --> Category
+
+@enduml
+
+' === ENTITY RELATIONSHIP DIAGRAM ===
+@startuml
+
+entity "Users" {
+  * user_id : int <<PK>>
+  --
+  username : str
+  email : str
+  password : str
+  role : str
+}
+
+entity "Articles" {
+  * article_id : int <<PK>>
+  --
+  title : str
+  content : str
+  category_id : int <<FK>>
+  source_url : str
+  date_published : datetime
+}
+
+entity "SavedArticles" {
+  * id : int <<PK>>
+  --
+  user_id : int <<FK>>
+  article_id : int <<FK>>
+}
+
+entity "Categories" {
+  * category_id : int <<PK>>
+  --
+  name : str
+}
+
+entity "UserCategoryPreferences" {
+  * id : int <<PK>>
+  --
+  user_id : int <<FK>>
+  category_id : int <<FK>>
+  enabled : bool
+}
+
+entity "Keywords" {
+  * keyword_id : int <<PK>>
+  --
+  keyword_text : str
+}
+
+entity "UserKeywordPreferences" {
+  * id : int <<PK>>
+  --
+  user_id : int <<FK>>
+  keyword_id : int <<FK>>
+}
+
+entity "ExternalAPIServers" {
+  * id : int <<PK>>
+  --
+  name : str
+  api_key : str
+  status : str
+  last_accessed : datetime
+}
+
+entity "UserNotifications" {
+  * id : int <<PK>>
+  --
+  user_id : int <<FK>>
+  article_id : int <<FK>>
+}
+
+Users ||--o{ SavedArticles : saves
+Articles ||--o{ SavedArticles : saved_in
+Articles }o--|| Categories : categorized
+Users ||--o{ UserCategoryPreferences : configures
+Categories ||--o{ UserCategoryPreferences : maps
+Users ||--o{ UserKeywordPreferences : configures
+Keywords ||--o{ UserKeywordPreferences : maps
+Users ||--o{ UserNotifications : notified_for
+Articles ||--o{ UserNotifications : mentioned
+
+@enduml

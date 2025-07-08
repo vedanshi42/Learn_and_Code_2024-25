@@ -1,0 +1,16 @@
+# Server-side
+psycopg2-binary         # PostgreSQL DB driver
+python-dotenv           # Load .env config
+schedule                # For periodic fetching
+bcrypt                  # For password hashing
+requests                # To call external APIs
+fastapi                 # to handle APIs
+uvicorn                 # FastAPI server runner
+pydantic                # Data validation
+scikit-learn            # Category prediction ML model
+joblib                  # Running code parallely as pipelines
+tabulate                # Get results in tabular format
+
+# Testing
+pytest
+pytest-mock

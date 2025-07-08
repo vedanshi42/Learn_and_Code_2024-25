@@ -1,0 +1,488 @@
+keyword,category
+ai,Technology
+artificial intelligence,Technology
+machine learning,Technology
+chatgpt,Technology
+openai,Technology
+deep learning,Technology
+neural network,Technology
+cloud,Technology
+big data,Technology
+coding,Technology
+programming,Technology
+java,Technology
+python,Technology
+algorithm,Technology
+tech,Technology
+startup,Business
+entrepreneur,Business
+funding,Business
+ipo,Business
+investment,Finance
+bitcoin,Finance
+crypto,Finance
+ethereum,Finance
+nft,Finance
+stock,Finance
+market,Finance
+inflation,Finance
+recession,Finance
+bank,Finance
+interest rate,Finance
+economy,Economy
+jobless,Economy
+unemployment,Economy
+labor,Economy
+workforce,Economy
+layoff,Economy
+gdp,Economy
+trump,Politics
+biden,Politics
+modi,Politics
+putin,Politics
+zelensky,Politics
+khamenei,Politics
+senate,Politics
+congress,Politics
+parliament,Politics
+lawmakers,Politics
+election,Politics
+government,Politics
+policy,Politics
+bill,Politics
+china,World
+usa,World
+russia,World
+israel,World
+iran,World
+ukraine,World
+germany,World
+france,World
+global,World
+nato,Defence
+missile,Defence
+bomb,Defence
+air-strike,Defence
+military,Defence
+army,Defence
+soldier,Defence
+idf,Defence
+war,Defence
+combat,Defence
+nuclear,Defence
+drone,Defence
+parade,Defence
+espionage,Defence
+crime,Crime
+murder,Crime
+assault,Crime
+rape,Crime
+theft,Crime
+violence,Crime
+hijack,Crime
+arrested,Crime
+police,Crime
+court,Crime
+trial,Crime
+law,Crime
+legal,Crime
+fraud,Crime
+corruption,Crime
+bribery,Crime
+hack,Crime
+cyberattack,Crime
+jail,Crime
+sentence,Crime
+school,Education
+student,Education
+college,Education
+university,Education
+exam,Education
+degree,Education
+teacher,Education
+research,Science
+discovery,Science
+experiment,Science
+science,Science
+biology,Science
+space,Science
+nasa,Science
+mars,Science
+health,Health
+vaccine,Health
+covid,Health
+pandemic,Health
+hospital,Health
+medicine,Health
+doctor,Health
+cancer,Health
+infection,Health
+virus,Health
+fitness,Health
+climate,Environment
+weather,Environment
+flood,Environment
+storm,Environment
+rain,Environment
+heat,Environment
+pollution,Environment
+drought,Environment
+wildfire,Environment
+fire,Environment
+earthquake,Environment
+eclipse,Environment
+festival,Entertainment
+concert,Entertainment
+music,Entertainment
+movie,Entertainment
+actor,Entertainment
+celebrity,Entertainment
+show,Entertainment
+netflix,Entertainment
+series,Entertainment
+theatre,Entertainment
+sports,Sports
+cricket,Sports
+football,Sports
+nba,Sports
+tennis,Sports
+soccer,Sports
+match,Sports
+player,Sports
+coach,Sports
+cup,Sports
+tournament,Sports
+goal,Sports
+run,Sports
+trophy,Sports
+referee,Sports
+android,Technology
+ios,Technology
+windows,Technology
+mac,Technology
+laptop,Technology
+smartphone,Technology
+mobile,Technology
+device,Technology
+hardware,Technology
+firmware,Software
+patch,Software
+release,Software
+update,Software
+bug,Software
+package,Software
+library,Software
+pypi,Software
+github,Software
+json,Software
+version,Software
+command line,Software
+cli,Software
+ide,Software
+plugin,Software
+toolkit,Software
+browser,Technology
+chrome,Technology
+firefox,Technology
+safari,Technology
+edge,Technology
+apple,Technology
+google,Technology
+microsoft,Technology
+facebook,Technology
+whatsapp,Technology
+instagram,Technology
+social media,Technology
+elon musk,Technology
+spacex,Technology
+tesla,Technology
+twitter,Technology
+x corp,Technology
+religion,World
+hindu,World
+muslim,World
+jewish,World
+christian,World
+temple,World
+church,World
+mosque,World
+god,World
+faith,World
+terror,Crime
+terrorist,Crime
+bombing,Defence
+protest,Politics
+riot,Crime
+gender,Politics
+lgbtq,Politics
+transgender,Politics
+immigration,Politics
+border,Politics
+refugee,Politics
+travel,World
+tourism,World
+airline,Transportation
+flight,Transportation
+train,Transportation
+bus,Transportation
+metro,Transportation
+traffic,Transportation
+transport,Transportation
+ride,Transportation
+infrastructure,Transportation
+missile,Defence
+bombing,Defence
+idf,Defence
+airstrike,Defence
+nuclear,Defence
+war,Defence
+weapons,Defence
+soldiers,Defence
+troops,Defence
+military parade,Defence
+combat,Defence
+surveillance,Defence
+espionage,Defence
+diplomacy,Politics
+diplomat,Politics
+ambassador,Politics
+minister,Politics
+senator,Politics
+election,Politics
+democrat,Politics
+republican,Politics
+bjp,Politics
+congress,Politics
+trump,Politics
+biden,Politics
+modi,Politics
+rahul gandhi,Politics
+nato,Politics
+white house,Politics
+zelensky,Politics
+khamenei,Politics
+ayatollah,Politics
+foreign policy,Politics
+summit,Politics
+cabinet,Politics
+iran,Politics
+israel,Politics
+palestine,Politics
+haifa,World
+gaza,World
+china,World
+taiwan,World
+korea,World
+japan,World
+russia,World
+ukraine,World
+european union,World
+eu,World
+world,World
+brexit,World
+migration,World
+refugee,World
+immigration,World
+arson,Crime
+corruption,Crime
+theft,Crime
+hacked,Crime
+murder,Crime
+violence,Crime
+criminal,Crime
+police,Crime
+indicted,Crime
+scam,Crime
+bribery,Crime
+rape,Crime
+assault,Crime
+court,Crime
+trial,Crime
+lawsuit,Crime
+sue,Crime
+investigation,Crime
+fraud,Crime
+flight delay,Transportation
+flight cancellation,Transportation
+airline,Transportation
+bus,Transportation
+metro,Transportation
+transportation,Transportation
+airport,Transportation
+aviation,Transportation
+train,Transportation
+road,Transportation
+infrastructure,Transportation
+lockdown,Health
+quarantine,Health
+covid,Health
+vaccine,Health
+pandemic,Health
+epidemic,Health
+infection,Health
+cancer,Health
+hospital,Health
+disease,Health
+healthcare,Health
+mental health,Health
+therapy,Health
+pregnancy,Health
+fetus,Health
+maternity,Health
+doctor,Health
+clinic,Health
+syndrome,Health
+malaria,Health
+bacteria,Health
+plasmodium,Health
+vaccination,Health
+logistics,Transportation
+public transport,Transportation
+ride-sharing,Transportation
+transportation network,Transportation
+freight,Transportation
+shipping,Transportation
+vehicle,Transportation
+commute,Transportation
+traffic congestion,Transportation
+transportation policy,Transportation
+athletics,Sports
+championship,Sports
+sportsmanship,Sports
+sports league,Sports
+sports event,Sports
+sports team,Sports
+sports equipment,Sports
+fitness training,Sports
+sports medicine,Sports
+sports analytics,Sports
+streaming service,Entertainment
+film festival,Entertainment
+television show,Entertainment
+celebrity news,Entertainment
+entertainment industry,Entertainment
+box office,Entertainment
+reality show,Entertainment
+award ceremony,Entertainment
+music festival,Entertainment
+podcast,Entertainment
+sustainability,Environment
+conservation,Environment
+renewable energy,Environment
+climate change,Environment
+biodiversity,Environment
+ecosystem,Environment
+environmental policy,Environment
+carbon footprint,Environment
+natural resources,Environment
+waste management,Environment
+public health,Health
+nutrition,Health
+mental illness,Health
+healthcare system,Health
+wellness,Health
+chronic disease,Health
+health insurance,Health
+preventive care,Health
+health policy,Health
+telemedicine,Health
+physics,Science
+chemistry,Science
+environmental science,Science
+genetics,Science
+astronomy,Science
+neuroscience,Science
+scientific method,Science
+research paper,Science
+laboratory,Science
+scientific community,Science
+online learning,Education
+vocational training,Education
+educational technology,Education
+curriculum,Education
+pedagogy,Education
+literacy,Education
+scholarship,Education
+academic performance,Education
+higher education,Education
+distance education,Education
+organized crime,Crime
+cybercrime,Crime
+white-collar crime,Crime
+hate crime,Crime
+domestic violence,Crime
+human trafficking,Crime
+drug trafficking,Crime
+identity theft,Crime
+criminal justice,Crime
+juvenile delinquency,Crime
+national security,Defence
+peacekeeping,Defence
+military strategy,Defence
+defense budget,Defence
+arms control,Defence
+counter-terrorism,Defence
+military intelligence,Defence
+defense contractor,Defence
+strategic alliance,Defence
+military technology,Defence
+global warming,World
+international trade,World
+world health organization,World
+global economy,World
+geopolitical,World
+foreign relations,World
+world peace,World
+humanitarian aid,World
+cultural exchange,World
+international law,World
+political party,Politics
+election campaign,Politics
+public policy,Politics
+political debate,Politics
+voter turnout,Politics
+political reform,Politics
+civil rights,Politics
+international relations,Politics
+political activism,Politics
+grassroots movement,Politics
+inflation rate,Economy
+economic growth,Economy
+fiscal policy,Economy
+monetary policy,Economy
+trade balance,Economy
+consumer price index,Economy
+economic downturn,Economy
+recession risk,Economy
+economic recovery,Economy
+labor market,Economy
+cryptocurrency,Finance
+stock market,Finance
+investment portfolio,Finance
+financial analysis,Finance
+asset management,Finance
+hedge fund,Finance
+capital gains,Finance
+savings account,Finance
+credit score,Finance
+loan,Finance
+venture capital,Business
+entrepreneurship,Business
+merger,Business
+acquisition,Business
+startup ecosystem,Business
+business model,Business
+market research,Business
+business strategy,Business
+supply chain,Business
+e-commerce,Business
+software development,Technology
+artificial neural network,Technology
+data science,Technology
+cybersecurity,Technology
+blockchain,Technology
+virtual reality,Technology
+augmented reality,Technology
+machine vision,Technology
+robotics,Technology
+internet of things,Technology
